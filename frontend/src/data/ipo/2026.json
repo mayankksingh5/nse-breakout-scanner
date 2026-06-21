@@ -1,0 +1,152 @@
+{
+  "year": 2026,
+  "ipos": [
+    {
+      "slug": "tata-capital",
+      "companyName": "Tata Capital",
+      "sector": "Financial Services",
+      "status": "UPCOMING",
+      "year": 2026,
+      "openDate": "2026-07-20",
+      "closeDate": "2026-07-22",
+      "issuePrice": 0,
+      "gmp": 95,
+      "summary": "The flagship financial-services arm of the Tata Group, mandated to list under RBI's upper-layer NBFC norms. One of the most anticipated IPOs of 2026.",
+      "overview": {
+        "introduction": "Tata Capital is a diversified NBFC offering retail, SME and corporate lending, wealth and investment products, part of the Tata Group.",
+        "businessModel": "Earns a net interest margin across a broad lending portfolio, leveraging the Tata brand, diversified products and a pan-India distribution footprint.",
+        "industryAnalysis": "RBI's scale-based regulation is pushing large NBFCs to list; India's credit demand offers a long growth runway.",
+        "promoters": ["Tata Sons Private Limited"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 15000,
+        "priceBandLow": 310,
+        "priceBandHigh": 326,
+        "lotSize": 46
+      },
+      "financials": [
+        { "year": "FY24", "revenueCr": 18175, "profitCr": 3150, "ebitdaCr": 14000, "netWorthCr": 24000, "debtCr": 130000 },
+        { "year": "FY25", "revenueCr": 23000, "profitCr": 3650, "ebitdaCr": 17000, "netWorthCr": 28000, "debtCr": 160000 }
+      ],
+      "cagrRevenue": 26.5,
+      "market": {
+        "currentPrice": 0,
+        "week52High": 0,
+        "week52Low": 0,
+        "marketCapCr": 0,
+        "peRatio": null,
+        "roe": null,
+        "roce": null,
+        "dividendYield": null
+      },
+      "priceHistory": [],
+      "news": [
+        { "date": "2026-06-01", "title": "Tata Capital files updated DRHP for mega IPO", "source": "Economic Times" },
+        { "date": "2026-05-10", "title": "Pre-IPO grey market premium firms up", "source": "Moneycontrol" }
+      ],
+      "swot": {
+        "strengths": ["Tata Group brand and governance", "Diversified lending franchise"],
+        "weaknesses": ["Scale brings regulatory scrutiny", "Margin competition with banks"],
+        "opportunities": ["Retail and SME credit expansion", "Cross-sell across Tata ecosystem"],
+        "threats": ["Credit-cycle risk", "Rising cost of funds"]
+      }
+    },
+    {
+      "slug": "reliance-jio",
+      "companyName": "Reliance Jio (Jio Platforms)",
+      "sector": "Technology",
+      "status": "UPCOMING",
+      "year": 2026,
+      "openDate": "2026-10-12",
+      "closeDate": "2026-10-15",
+      "issuePrice": 0,
+      "summary": "Long-awaited public debut of India's largest telecom and digital-services operator. Expected to be among the biggest IPOs in Indian history.",
+      "overview": {
+        "introduction": "Jio Platforms is India's largest telecommunications and digital-services company, spanning mobile connectivity, broadband and a suite of consumer apps.",
+        "businessModel": "Generates ARPU-driven subscription revenue across mobile and home broadband, with upside from digital services, enterprise and AI initiatives.",
+        "industryAnalysis": "India's data consumption and 5G adoption continue to rise, while digital-services monetisation is an emerging lever.",
+        "promoters": ["Reliance Industries Limited"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 40000,
+        "priceBandLow": 0,
+        "priceBandHigh": 0,
+        "lotSize": 0
+      },
+      "financials": [
+        { "year": "FY24", "revenueCr": 108000, "profitCr": 20600, "ebitdaCr": 56000, "netWorthCr": 210000, "debtCr": 120000 },
+        { "year": "FY25", "revenueCr": 123000, "profitCr": 24000, "ebitdaCr": 64000, "netWorthCr": 235000, "debtCr": 115000 }
+      ],
+      "cagrRevenue": 13.9,
+      "market": {
+        "currentPrice": 0,
+        "week52High": 0,
+        "week52Low": 0,
+        "marketCapCr": 0,
+        "peRatio": null,
+        "roe": null,
+        "roce": null,
+        "dividendYield": null
+      },
+      "priceHistory": [],
+      "news": [
+        { "date": "2026-06-15", "title": "Reliance signals Jio listing timeline at AGM", "source": "Business Standard" }
+      ],
+      "swot": {
+        "strengths": ["Largest telecom subscriber base", "Strong digital ecosystem", "Deep parent backing"],
+        "weaknesses": ["Capital-intensive network", "Regulatory price sensitivity"],
+        "opportunities": ["5G and home-broadband monetisation", "AI and enterprise services"],
+        "threats": ["Tariff competition", "Spectrum and regulatory costs"]
+      }
+    },
+    {
+      "slug": "zepto",
+      "companyName": "Zepto (Kiranakart Technologies)",
+      "sector": "Internet",
+      "status": "UPCOMING",
+      "year": 2026,
+      "openDate": "2026-09-01",
+      "closeDate": "2026-09-03",
+      "issuePrice": 0,
+      "gmp": 0,
+      "summary": "Quick-commerce challenger eyeing a public listing after rapid GMV growth. A high-profile, high-growth, still-loss-making consumer-internet IPO.",
+      "overview": {
+        "introduction": "Zepto operates a quick-commerce platform delivering groceries and daily essentials in minutes via a network of dark stores.",
+        "businessModel": "Earns take-rate and advertising revenue on rapid-delivery orders, scaling dark-store density to improve unit economics.",
+        "industryAnalysis": "Indian quick-commerce is growing explosively but remains intensely competitive and cash-burning.",
+        "promoters": ["Aadit Palicha", "Kaivalya Vohra"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 8500,
+        "priceBandLow": 0,
+        "priceBandHigh": 0,
+        "lotSize": 0
+      },
+      "financials": [
+        { "year": "FY24", "revenueCr": 4454, "profitCr": -1248, "ebitdaCr": -1000, "netWorthCr": 3500, "debtCr": 200 },
+        { "year": "FY25", "revenueCr": 8000, "profitCr": -900, "ebitdaCr": -650, "netWorthCr": 6000, "debtCr": 300 }
+      ],
+      "cagrRevenue": 79.6,
+      "market": {
+        "currentPrice": 0,
+        "week52High": 0,
+        "week52Low": 0,
+        "marketCapCr": 0,
+        "peRatio": null,
+        "roe": null,
+        "roce": null,
+        "dividendYield": null
+      },
+      "priceHistory": [],
+      "news": [
+        { "date": "2026-05-28", "title": "Zepto raises pre-IPO round, eyes profitability", "source": "Mint" }
+      ],
+      "swot": {
+        "strengths": ["Fast GMV growth", "Strong urban brand recall"],
+        "weaknesses": ["Continued cash burn", "Thin delivery economics"],
+        "opportunities": ["Advertising monetisation", "Category expansion"],
+        "threats": ["Deep-pocketed competitors", "Regulatory and labour costs"]
+      }
+    }
+  ]
+}

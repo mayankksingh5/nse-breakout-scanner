@@ -1,0 +1,307 @@
+{
+  "year": 2024,
+  "ipos": [
+    {
+      "slug": "waaree-energies",
+      "companyName": "Waaree Energies",
+      "sector": "Renewable Energy",
+      "status": "LISTED",
+      "year": 2024,
+      "openDate": "2024-10-21",
+      "closeDate": "2024-10-23",
+      "listingDate": "2024-10-28",
+      "issuePrice": 1503,
+      "listingPrice": 2500,
+      "gmp": 1370,
+      "summary": "India's largest solar PV module manufacturer by capacity. One of 2024's most-subscribed IPOs, listing at a ~66% premium on the back of a booming solar order book.",
+      "overview": {
+        "introduction": "Waaree Energies is the largest manufacturer of solar PV modules in India by installed capacity, with a growing presence across the solar value chain including cells and ingots.",
+        "businessModel": "Manufactures and sells solar modules to domestic utilities, EPC players and exporters (notably the US). Forward integration into cells and a large order book underpin revenue visibility.",
+        "industryAnalysis": "Global decarbonisation and India's domestic content rules (ALMM) favour large, integrated domestic module makers with US export exposure.",
+        "promoters": ["Hitesh Chimanlal Doshi", "Viren Chimanlal Doshi"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 4321,
+        "priceBandLow": 1427,
+        "priceBandHigh": 1503,
+        "lotSize": 9,
+        "subscription": { "overall": 76.3, "retail": 11.3, "qib": 215.5, "nii": 65.3 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 2945, "profitCr": 80, "ebitdaCr": 230, "netWorthCr": 700, "debtCr": 360 },
+        { "year": "FY23", "revenueCr": 6751, "profitCr": 500, "ebitdaCr": 760, "netWorthCr": 1900, "debtCr": 520 },
+        { "year": "FY24", "revenueCr": 11398, "profitCr": 1274, "ebitdaCr": 1700, "netWorthCr": 4300, "debtCr": 480 }
+      ],
+      "cagrRevenue": 96.7,
+      "market": {
+        "currentPrice": 3200,
+        "week52High": 3744,
+        "week52Low": 1900,
+        "marketCapCr": 91900,
+        "peRatio": 56.4,
+        "roe": 29.6,
+        "roce": 31.2,
+        "dividendYield": 0.0
+      },
+      "priceHistory": [
+        { "date": "2024-10-28", "price": 2500 },
+        { "date": "2024-11-30", "price": 3050 },
+        { "date": "2024-12-31", "price": 2780 },
+        { "date": "2025-01-31", "price": 2400 },
+        { "date": "2025-03-31", "price": 2100 },
+        { "date": "2025-04-30", "price": 2650 },
+        { "date": "2025-05-31", "price": 3000 },
+        { "date": "2025-06-20", "price": 3200 }
+      ],
+      "news": [
+        { "date": "2025-06-02", "title": "Waaree commissions new cell manufacturing line", "source": "Economic Times" },
+        { "date": "2025-04-28", "title": "US subsidiary bags large module supply order", "source": "Business Standard" },
+        { "date": "2025-02-10", "title": "Q3 profit jumps on strong export realisations", "source": "Moneycontrol" }
+      ],
+      "swot": {
+        "strengths": ["Largest module capacity in India", "Strong US export franchise", "Robust multi-year order book"],
+        "weaknesses": ["Earnings sensitive to module price cycles", "High working-capital intensity"],
+        "opportunities": ["Backward integration into cells/wafers", "India 500 GW renewable target"],
+        "threats": ["US trade-policy / tariff shifts", "Chinese oversupply pressuring prices"]
+      }
+    },
+    {
+      "slug": "bajaj-housing-finance",
+      "companyName": "Bajaj Housing Finance",
+      "sector": "Financial Services",
+      "status": "LISTED",
+      "year": 2024,
+      "openDate": "2024-09-09",
+      "closeDate": "2024-09-11",
+      "listingDate": "2024-09-16",
+      "issuePrice": 70,
+      "listingPrice": 150,
+      "gmp": 75,
+      "summary": "Mortgage lender backed by the Bajaj Group. The year's blockbuster, doubling on debut amid record retail demand.",
+      "overview": {
+        "introduction": "Bajaj Housing Finance is a non-deposit-taking housing finance company offering home loans, loans against property and developer finance, part of the Bajaj Finance group.",
+        "businessModel": "Earns a net interest margin on a prime, low-risk mortgage book, leveraging the Bajaj brand, low cost of funds and a digital-first distribution model.",
+        "industryAnalysis": "India's mortgage-to-GDP ratio remains low versus peers, giving prime housing lenders a long growth runway.",
+        "promoters": ["Bajaj Finance Limited", "Bajaj Finserv Limited"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 6560,
+        "priceBandLow": 66,
+        "priceBandHigh": 70,
+        "lotSize": 214,
+        "subscription": { "overall": 63.6, "retail": 7.0, "qib": 209.4, "nii": 41.5 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 3767, "profitCr": 710, "ebitdaCr": 3200, "netWorthCr": 6700, "debtCr": 38000 },
+        { "year": "FY23", "revenueCr": 5665, "profitCr": 1258, "ebitdaCr": 4900, "netWorthCr": 10500, "debtCr": 52000 },
+        { "year": "FY24", "revenueCr": 7618, "profitCr": 1731, "ebitdaCr": 6600, "netWorthCr": 12200, "debtCr": 73000 }
+      ],
+      "cagrRevenue": 42.2,
+      "market": {
+        "currentPrice": 118,
+        "week52High": 188,
+        "week52Low": 103,
+        "marketCapCr": 98200,
+        "peRatio": 49.5,
+        "roe": 15.2,
+        "roce": 9.1,
+        "dividendYield": 0.0
+      },
+      "priceHistory": [
+        { "date": "2024-09-16", "price": 150 },
+        { "date": "2024-09-30", "price": 178 },
+        { "date": "2024-12-31", "price": 128 },
+        { "date": "2025-03-31", "price": 110 },
+        { "date": "2025-06-20", "price": 118 }
+      ],
+      "news": [
+        { "date": "2025-04-29", "title": "Bajaj Housing AUM crosses milestone in FY25", "source": "Mint" },
+        { "date": "2025-01-20", "title": "Reports lowest GNPA among large HFCs", "source": "Moneycontrol" }
+      ],
+      "swot": {
+        "strengths": ["Strong Bajaj parentage and brand", "Prime, low-NPA loan book", "Low cost of borrowing"],
+        "weaknesses": ["Thin spreads on prime mortgages", "High competitive intensity"],
+        "opportunities": ["Under-penetrated mortgage market", "Cross-sell across Bajaj ecosystem"],
+        "threats": ["Interest-rate volatility", "Aggressive pricing by banks"]
+      }
+    },
+    {
+      "slug": "hyundai-motor-india",
+      "companyName": "Hyundai Motor India",
+      "sector": "Automobile",
+      "status": "LISTED",
+      "year": 2024,
+      "openDate": "2024-10-15",
+      "closeDate": "2024-10-17",
+      "listingDate": "2024-10-22",
+      "issuePrice": 1960,
+      "listingPrice": 1934,
+      "gmp": 15,
+      "summary": "India's largest-ever IPO at the time and the country's second-biggest carmaker. A muted listing as the entire issue was an offer for sale.",
+      "overview": {
+        "introduction": "Hyundai Motor India is the Indian arm of Hyundai Motor Company, manufacturing and selling passenger vehicles across hatchback, sedan and SUV segments.",
+        "businessModel": "Earns from domestic vehicle sales and exports, with a strong SUV-led product mix and an established dealer and service network.",
+        "industryAnalysis": "Indian PV demand is premiumising toward SUVs; EV transition and export potential are key long-term levers.",
+        "promoters": ["Hyundai Motor Company (South Korea)"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 27870,
+        "priceBandLow": 1865,
+        "priceBandHigh": 1960,
+        "lotSize": 7,
+        "subscription": { "overall": 2.4, "retail": 0.5, "qib": 6.97, "nii": 0.6 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 47966, "profitCr": 2902, "ebitdaCr": 5400, "netWorthCr": 14500, "debtCr": 700 },
+        { "year": "FY23", "revenueCr": 60307, "profitCr": 4709, "ebitdaCr": 7300, "netWorthCr": 17800, "debtCr": 600 },
+        { "year": "FY24", "revenueCr": 69829, "profitCr": 6060, "ebitdaCr": 9100, "netWorthCr": 20100, "debtCr": 500 }
+      ],
+      "cagrRevenue": 20.6,
+      "market": {
+        "currentPrice": 1820,
+        "week52High": 2014,
+        "week52Low": 1542,
+        "marketCapCr": 147900,
+        "peRatio": 24.4,
+        "roe": 30.1,
+        "roce": 38.5,
+        "dividendYield": 0.0
+      },
+      "priceHistory": [
+        { "date": "2024-10-22", "price": 1934 },
+        { "date": "2024-12-31", "price": 1760 },
+        { "date": "2025-03-31", "price": 1690 },
+        { "date": "2025-06-20", "price": 1820 }
+      ],
+      "news": [
+        { "date": "2025-05-15", "title": "Hyundai India unveils new EV for domestic market", "source": "Economic Times" },
+        { "date": "2025-02-01", "title": "Exports help offset soft domestic demand", "source": "Business Standard" }
+      ],
+      "swot": {
+        "strengths": ["Strong SUV portfolio", "High return ratios", "Established brand and network"],
+        "weaknesses": ["Royalty payments to parent", "OFS-only float limits fresh capital"],
+        "opportunities": ["EV line-up and exports", "Premiumisation trend"],
+        "threats": ["Intense PV competition", "Input-cost and FX volatility"]
+      }
+    },
+    {
+      "slug": "ola-electric",
+      "companyName": "Ola Electric Mobility",
+      "sector": "Automobile",
+      "status": "LISTED",
+      "year": 2024,
+      "openDate": "2024-08-02",
+      "closeDate": "2024-08-06",
+      "listingDate": "2024-08-09",
+      "issuePrice": 76,
+      "listingPrice": 76,
+      "gmp": 1,
+      "summary": "India's first pure-play EV two-wheeler maker to list. A flat debut followed by a volatile post-listing journey amid profitability concerns.",
+      "overview": {
+        "introduction": "Ola Electric is a vertically integrated electric two-wheeler manufacturer, also developing cells and battery technology in-house.",
+        "businessModel": "Sells electric scooters direct-to-consumer and online, aiming to integrate cell manufacturing to control costs across the EV value chain.",
+        "industryAnalysis": "India's EV two-wheeler market is growing fast but is fiercely competitive and sensitive to subsidy policy.",
+        "promoters": ["Bhavish Aggarwal"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 6146,
+        "priceBandLow": 72,
+        "priceBandHigh": 76,
+        "lotSize": 195,
+        "subscription": { "overall": 4.3, "retail": 4.0, "qib": 5.5, "nii": 2.5 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 373, "profitCr": -784, "ebitdaCr": -650, "netWorthCr": 2900, "debtCr": 1300 },
+        { "year": "FY23", "revenueCr": 2631, "profitCr": -1472, "ebitdaCr": -1100, "netWorthCr": 3800, "debtCr": 2100 },
+        { "year": "FY24", "revenueCr": 5010, "profitCr": -1584, "ebitdaCr": -1200, "netWorthCr": 5500, "debtCr": 2600 }
+      ],
+      "cagrRevenue": 266.0,
+      "market": {
+        "currentPrice": 48,
+        "week52High": 158,
+        "week52Low": 43,
+        "marketCapCr": 21200,
+        "peRatio": null,
+        "roe": -28.8,
+        "roce": -15.0,
+        "dividendYield": 0.0
+      },
+      "priceHistory": [
+        { "date": "2024-08-09", "price": 76 },
+        { "date": "2024-08-20", "price": 158 },
+        { "date": "2024-12-31", "price": 88 },
+        { "date": "2025-03-31", "price": 54 },
+        { "date": "2025-06-20", "price": 48 }
+      ],
+      "news": [
+        { "date": "2025-05-30", "title": "Ola Electric narrows losses but misses delivery targets", "source": "Moneycontrol" },
+        { "date": "2025-03-12", "title": "Service-network complaints weigh on sentiment", "source": "Mint" }
+      ],
+      "swot": {
+        "strengths": ["First-mover scale in EV two-wheelers", "Vertical integration ambition"],
+        "weaknesses": ["Persistent losses", "Service and quality issues"],
+        "opportunities": ["In-house cell manufacturing", "Rising EV adoption"],
+        "threats": ["Subsidy cuts", "Legacy OEMs entering EVs aggressively"]
+      }
+    },
+    {
+      "slug": "ntpc-green-energy",
+      "companyName": "NTPC Green Energy",
+      "sector": "Renewable Energy",
+      "status": "LISTED",
+      "year": 2024,
+      "openDate": "2024-11-19",
+      "closeDate": "2024-11-22",
+      "listingDate": "2024-11-27",
+      "issuePrice": 108,
+      "listingPrice": 111,
+      "gmp": 1,
+      "summary": "The renewable arm of state-owned NTPC, housing its solar and wind portfolio. A modest listing for a large green-energy bet.",
+      "overview": {
+        "introduction": "NTPC Green Energy is the renewable energy subsidiary of NTPC, developing and operating solar and wind power assets across India.",
+        "businessModel": "Generates revenue through long-term power purchase agreements (PPAs) for renewable power, backed by NTPC's execution capability and balance sheet.",
+        "industryAnalysis": "India's clean-energy capacity addition is accelerating; PSU-backed developers offer scale and creditworthiness.",
+        "promoters": ["NTPC Limited"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 10000,
+        "priceBandLow": 102,
+        "priceBandHigh": 108,
+        "lotSize": 138,
+        "subscription": { "overall": 2.4, "retail": 3.4, "qib": 3.5, "nii": 0.8 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 910, "profitCr": 95, "ebitdaCr": 800, "netWorthCr": 4500, "debtCr": 9000 },
+        { "year": "FY23", "revenueCr": 1963, "profitCr": 171, "ebitdaCr": 1700, "netWorthCr": 6200, "debtCr": 12000 },
+        { "year": "FY24", "revenueCr": 1963, "profitCr": 345, "ebitdaCr": 1750, "netWorthCr": 7800, "debtCr": 16000 }
+      ],
+      "cagrRevenue": 46.8,
+      "market": {
+        "currentPrice": 102,
+        "week52High": 155,
+        "week52Low": 84,
+        "marketCapCr": 86000,
+        "peRatio": 220.0,
+        "roe": 5.4,
+        "roce": 7.2,
+        "dividendYield": 0.0
+      },
+      "priceHistory": [
+        { "date": "2024-11-27", "price": 111 },
+        { "date": "2024-12-31", "price": 130 },
+        { "date": "2025-03-31", "price": 95 },
+        { "date": "2025-06-20", "price": 102 }
+      ],
+      "news": [
+        { "date": "2025-05-08", "title": "NTPC Green signs PPAs for new solar capacity", "source": "PTI" },
+        { "date": "2025-02-14", "title": "Capacity pipeline expands to multi-GW scale", "source": "Economic Times" }
+      ],
+      "swot": {
+        "strengths": ["NTPC parentage and PPA visibility", "Large renewable pipeline"],
+        "weaknesses": ["Rich valuation versus current earnings", "High capex and leverage"],
+        "opportunities": ["Green hydrogen and storage", "Aggressive capacity targets"],
+        "threats": ["Execution and land/grid risks", "Tariff competition"]
+      }
+    }
+  ]
+}

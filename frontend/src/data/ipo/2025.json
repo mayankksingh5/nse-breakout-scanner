@@ -1,0 +1,187 @@
+{
+  "year": 2025,
+  "ipos": [
+    {
+      "slug": "hdb-financial-services",
+      "companyName": "HDB Financial Services",
+      "sector": "Financial Services",
+      "status": "LISTED",
+      "year": 2025,
+      "openDate": "2025-06-25",
+      "closeDate": "2025-06-27",
+      "listingDate": "2025-07-02",
+      "issuePrice": 740,
+      "listingPrice": 835,
+      "gmp": 78,
+      "summary": "The diversified retail NBFC arm of HDFC Bank. One of 2025's largest IPOs, listing at a healthy premium on strong institutional demand.",
+      "overview": {
+        "introduction": "HDB Financial Services is a leading diversified retail-focused non-banking financial company and a subsidiary of HDFC Bank, offering lending and BPO services.",
+        "businessModel": "Operates across Enterprise Lending, Asset Finance and Consumer Finance, distributed through a wide branch network and digital channels, backed by HDFC Bank parentage.",
+        "industryAnalysis": "India's retail credit demand continues to expand; well-capitalised, bank-backed NBFCs are positioned to gain share.",
+        "promoters": ["HDFC Bank Limited"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 12500,
+        "priceBandLow": 700,
+        "priceBandHigh": 740,
+        "lotSize": 20,
+        "subscription": { "overall": 17.6, "retail": 1.5, "qib": 55.5, "nii": 9.9 }
+      },
+      "financials": [
+        { "year": "FY23", "revenueCr": 12403, "profitCr": 1959, "ebitdaCr": 9000, "netWorthCr": 11400, "debtCr": 54000 },
+        { "year": "FY24", "revenueCr": 14171, "profitCr": 2461, "ebitdaCr": 10500, "netWorthCr": 13300, "debtCr": 67000 },
+        { "year": "FY25", "revenueCr": 16300, "profitCr": 2700, "ebitdaCr": 12000, "netWorthCr": 15500, "debtCr": 79000 }
+      ],
+      "cagrRevenue": 14.6,
+      "market": {
+        "currentPrice": 870,
+        "week52High": 905,
+        "week52Low": 740,
+        "marketCapCr": 69200,
+        "peRatio": 25.6,
+        "roe": 18.7,
+        "roce": 10.2,
+        "dividendYield": 0.0
+      },
+      "priceHistory": [
+        { "date": "2025-07-02", "price": 835 },
+        { "date": "2025-07-31", "price": 880 },
+        { "date": "2025-09-30", "price": 845 },
+        { "date": "2025-12-31", "price": 910 },
+        { "date": "2026-03-31", "price": 855 },
+        { "date": "2026-06-20", "price": 870 }
+      ],
+      "news": [
+        { "date": "2026-04-25", "title": "HDB Financial posts steady FY26 earnings growth", "source": "Economic Times" },
+        { "date": "2025-10-18", "title": "AUM crosses milestone post-listing", "source": "Moneycontrol" }
+      ],
+      "swot": {
+        "strengths": ["HDFC Bank parentage", "Diversified retail loan mix", "Wide physical reach"],
+        "weaknesses": ["Exposure to unsecured lending cycles", "Margin pressure in competitive segments"],
+        "opportunities": ["Cross-sell via parent ecosystem", "Digital lending scale-up"],
+        "threats": ["Asset-quality stress in downturns", "Regulatory tightening on NBFCs"]
+      }
+    },
+    {
+      "slug": "hexaware-technologies",
+      "companyName": "Hexaware Technologies",
+      "sector": "Technology",
+      "status": "LISTED",
+      "year": 2025,
+      "openDate": "2025-02-12",
+      "closeDate": "2025-02-14",
+      "listingDate": "2025-02-19",
+      "issuePrice": 708,
+      "listingPrice": 745,
+      "gmp": 22,
+      "summary": "A mid-tier IT services firm returning to the bourses under PE ownership. The largest IT IPO in India at the time.",
+      "overview": {
+        "introduction": "Hexaware Technologies is a global digital and technology services company providing IT, BPS and cloud transformation services across financial services, healthcare and travel verticals.",
+        "businessModel": "Earns recurring revenue from outsourced IT and digital engagement with global enterprises, with an automation- and AI-led delivery model.",
+        "industryAnalysis": "Enterprise demand is shifting toward cloud, data and AI-led modernisation, benefiting agile mid-cap IT firms.",
+        "promoters": ["CA Magnum Holdings (Carlyle Group)"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 8750,
+        "priceBandLow": 674,
+        "priceBandHigh": 708,
+        "lotSize": 21,
+        "subscription": { "overall": 2.7, "retail": 1.1, "qib": 9.1, "nii": 0.2 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 9379, "profitCr": 884, "ebitdaCr": 1500, "netWorthCr": 4200, "debtCr": 300 },
+        { "year": "FY23", "revenueCr": 10380, "profitCr": 998, "ebitdaCr": 1650, "netWorthCr": 5000, "debtCr": 250 },
+        { "year": "FY24", "revenueCr": 11400, "profitCr": 1100, "ebitdaCr": 1800, "netWorthCr": 5900, "debtCr": 200 }
+      ],
+      "cagrRevenue": 10.3,
+      "market": {
+        "currentPrice": 790,
+        "week52High": 915,
+        "week52Low": 660,
+        "marketCapCr": 48000,
+        "peRatio": 38.0,
+        "roe": 20.4,
+        "roce": 25.0,
+        "dividendYield": 0.6
+      },
+      "priceHistory": [
+        { "date": "2025-02-19", "price": 745 },
+        { "date": "2025-03-31", "price": 700 },
+        { "date": "2025-06-30", "price": 820 },
+        { "date": "2025-09-30", "price": 880 },
+        { "date": "2025-12-31", "price": 760 },
+        { "date": "2026-06-20", "price": 790 }
+      ],
+      "news": [
+        { "date": "2026-04-20", "title": "Hexaware wins multi-year AI transformation deal", "source": "Business Standard" },
+        { "date": "2025-07-22", "title": "Carlyle pares stake via block deal", "source": "Mint" }
+      ],
+      "swot": {
+        "strengths": ["Strong cloud and automation capabilities", "Diversified vertical mix", "Low debt"],
+        "weaknesses": ["Client concentration in BFSI", "PE-driven supply overhang"],
+        "opportunities": ["AI-led services demand", "Large-deal expansion"],
+        "threats": ["Discretionary IT-spend slowdown", "Currency and wage pressures"]
+      }
+    },
+    {
+      "slug": "lg-electronics-india",
+      "companyName": "LG Electronics India",
+      "sector": "Consumer",
+      "status": "LISTED",
+      "year": 2025,
+      "openDate": "2025-09-09",
+      "closeDate": "2025-09-11",
+      "listingDate": "2025-09-16",
+      "issuePrice": 1080,
+      "listingPrice": 1450,
+      "gmp": 340,
+      "summary": "The Indian arm of the Korean consumer-durables giant. A strongly subscribed consumer IPO that listed at a sharp premium.",
+      "overview": {
+        "introduction": "LG Electronics India manufactures and sells home appliances and consumer electronics — refrigerators, washing machines, air-conditioners and televisions — across India.",
+        "businessModel": "Earns from a leadership position in premium home appliances, supported by strong brand equity, local manufacturing and an extensive service network.",
+        "industryAnalysis": "Rising incomes, urbanisation and premiumisation are driving structural growth in Indian consumer durables.",
+        "promoters": ["LG Electronics Inc. (South Korea)"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 11600,
+        "priceBandLow": 1025,
+        "priceBandHigh": 1080,
+        "lotSize": 13,
+        "subscription": { "overall": 54.0, "retail": 3.8, "qib": 166.5, "nii": 20.4 }
+      },
+      "financials": [
+        { "year": "FY23", "revenueCr": 19865, "profitCr": 1345, "ebitdaCr": 2100, "netWorthCr": 4800, "debtCr": 150 },
+        { "year": "FY24", "revenueCr": 21557, "profitCr": 1511, "ebitdaCr": 2400, "netWorthCr": 5600, "debtCr": 120 },
+        { "year": "FY25", "revenueCr": 24000, "profitCr": 1720, "ebitdaCr": 2700, "netWorthCr": 6500, "debtCr": 100 }
+      ],
+      "cagrRevenue": 9.9,
+      "market": {
+        "currentPrice": 1520,
+        "week52High": 1690,
+        "week52Low": 1320,
+        "marketCapCr": 103300,
+        "peRatio": 60.0,
+        "roe": 28.5,
+        "roce": 35.0,
+        "dividendYield": 0.4
+      },
+      "priceHistory": [
+        { "date": "2025-09-16", "price": 1450 },
+        { "date": "2025-09-30", "price": 1560 },
+        { "date": "2025-12-31", "price": 1480 },
+        { "date": "2026-03-31", "price": 1610 },
+        { "date": "2026-06-20", "price": 1520 }
+      ],
+      "news": [
+        { "date": "2026-05-12", "title": "LG India expands local AC manufacturing capacity", "source": "Economic Times" },
+        { "date": "2026-01-30", "title": "Premium appliances drive festive-season growth", "source": "Moneycontrol" }
+      ],
+      "swot": {
+        "strengths": ["Top-tier consumer brand", "Premium product leadership", "Strong return ratios"],
+        "weaknesses": ["Royalty outflow to parent", "Seasonality in cooling products"],
+        "opportunities": ["Premiumisation and exports", "Rising appliance penetration"],
+        "threats": ["Input-cost inflation", "Intense durables competition"]
+      }
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Enable manual (class-based) dark mode so the IPO section can toggle themes.
+   `dark:` variants apply whenever a `.dark` class is present on an ancestor. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

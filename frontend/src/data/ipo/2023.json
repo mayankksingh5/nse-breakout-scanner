@@ -1,0 +1,253 @@
+{
+  "year": 2023,
+  "ipos": [
+    {
+      "slug": "tata-technologies",
+      "companyName": "Tata Technologies",
+      "sector": "Technology",
+      "status": "LISTED",
+      "year": 2023,
+      "openDate": "2023-11-22",
+      "closeDate": "2023-11-24",
+      "listingDate": "2023-11-30",
+      "issuePrice": 500,
+      "listingPrice": 1200,
+      "gmp": 366,
+      "summary": "First Tata Group IPO in nearly two decades; an engineering R&D and digital services provider to global automotive and aerospace OEMs. Listed at a 140% premium.",
+      "overview": {
+        "introduction": "Tata Technologies is a global engineering services company offering product development and digital solutions, including turnkey solutions, to global original equipment manufacturers (OEMs) and their tier-1 suppliers.",
+        "businessModel": "Revenue comes from Services (outsourced engineering and digital transformation) and Technology Solutions (products and education). Deep anchor relationships with Tata Motors and JLR provide a stable base, complemented by a growing roster of non-Tata global clients.",
+        "industryAnalysis": "The global engineering, research and development (ER&D) outsourcing market is expanding as automakers shift to electric and software-defined vehicles, pushing R&D spend toward external specialists.",
+        "promoters": ["Tata Motors Limited"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 3042,
+        "priceBandLow": 475,
+        "priceBandHigh": 500,
+        "lotSize": 30,
+        "subscription": { "overall": 69.4, "retail": 16.5, "qib": 203.4, "nii": 62.1 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 3530, "profitCr": 437, "ebitdaCr": 660, "netWorthCr": 2300, "debtCr": 120 },
+        { "year": "FY23", "revenueCr": 4414, "profitCr": 624, "ebitdaCr": 820, "netWorthCr": 2950, "debtCr": 90 },
+        { "year": "FY24", "revenueCr": 5117, "profitCr": 679, "ebitdaCr": 905, "netWorthCr": 3600, "debtCr": 70 }
+      ],
+      "cagrRevenue": 20.4,
+      "market": {
+        "currentPrice": 720,
+        "week52High": 1248,
+        "week52Low": 595,
+        "marketCapCr": 29200,
+        "peRatio": 43.0,
+        "roe": 19.6,
+        "roce": 25.1,
+        "dividendYield": 1.2
+      },
+      "priceHistory": [
+        { "date": "2023-11-30", "price": 1200 },
+        { "date": "2023-12-31", "price": 1075 },
+        { "date": "2024-03-31", "price": 1010 },
+        { "date": "2024-06-30", "price": 1090 },
+        { "date": "2024-09-30", "price": 1140 },
+        { "date": "2024-12-31", "price": 940 },
+        { "date": "2025-03-31", "price": 760 },
+        { "date": "2025-06-30", "price": 720 }
+      ],
+      "news": [
+        { "date": "2025-05-09", "title": "Tata Technologies posts steady Q4; declares dividend", "source": "Economic Times" },
+        { "date": "2025-02-18", "title": "New deal signed with European OEM for EV platform", "source": "Business Standard" },
+        { "date": "2024-11-30", "title": "Stock completes one year since blockbuster listing", "source": "Mint" }
+      ],
+      "swot": {
+        "strengths": ["Marquee Tata Group parentage", "Deep automotive ER&D expertise", "Anchor clients in Tata Motors and JLR"],
+        "weaknesses": ["Client concentration in the Tata ecosystem", "Exposure to a single end-industry (auto)"],
+        "opportunities": ["EV and software-defined vehicle transition", "Diversification into aerospace and industrial heavy machinery"],
+        "threats": ["Slowdown in global auto R&D budgets", "Intense competition from larger ER&D peers"]
+      }
+    },
+    {
+      "slug": "ireda",
+      "companyName": "Indian Renewable Energy Development Agency (IREDA)",
+      "sector": "Financial Services",
+      "status": "LISTED",
+      "year": 2023,
+      "openDate": "2023-11-21",
+      "closeDate": "2023-11-23",
+      "listingDate": "2023-11-29",
+      "issuePrice": 32,
+      "listingPrice": 50,
+      "gmp": 18,
+      "summary": "State-owned NBFC dedicated to financing renewable energy and efficiency projects. A multibagger after listing on the back of India's green energy push.",
+      "overview": {
+        "introduction": "IREDA is a Mini Ratna (Category-I) government enterprise under the Ministry of New and Renewable Energy, providing financial assistance to renewable energy and energy-efficiency projects.",
+        "businessModel": "Lends to solar, wind, hydro, and energy-efficiency projects, earning a net interest spread. Benefits from sovereign backing, access to low-cost funds, and priority-sector positioning.",
+        "industryAnalysis": "India targets 500 GW of non-fossil capacity by 2030, creating a vast financing runway for specialised green lenders.",
+        "promoters": ["President of India (Government of India)"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 2150,
+        "priceBandLow": 30,
+        "priceBandHigh": 32,
+        "lotSize": 460,
+        "subscription": { "overall": 38.8, "retail": 7.7, "qib": 104.6, "nii": 24.2 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 2860, "profitCr": 634, "ebitdaCr": 2600, "netWorthCr": 5268, "debtCr": 27800 },
+        { "year": "FY23", "revenueCr": 3482, "profitCr": 865, "ebitdaCr": 3200, "netWorthCr": 5935, "debtCr": 40165 },
+        { "year": "FY24", "revenueCr": 4965, "profitCr": 1252, "ebitdaCr": 4600, "netWorthCr": 8559, "debtCr": 50800 }
+      ],
+      "cagrRevenue": 31.8,
+      "market": {
+        "currentPrice": 168,
+        "week52High": 310,
+        "week52Low": 137,
+        "marketCapCr": 45100,
+        "peRatio": 28.5,
+        "roe": 17.3,
+        "roce": 9.6,
+        "dividendYield": 0.0
+      },
+      "priceHistory": [
+        { "date": "2023-11-29", "price": 50 },
+        { "date": "2023-12-31", "price": 92 },
+        { "date": "2024-03-31", "price": 152 },
+        { "date": "2024-07-31", "price": 310 },
+        { "date": "2024-12-31", "price": 215 },
+        { "date": "2025-03-31", "price": 165 },
+        { "date": "2025-06-30", "price": 168 }
+      ],
+      "news": [
+        { "date": "2025-04-21", "title": "IREDA reports record annual disbursements", "source": "PTI" },
+        { "date": "2024-09-12", "title": "Board approves QIP to fund loan-book growth", "source": "Moneycontrol" }
+      ],
+      "swot": {
+        "strengths": ["Sovereign ownership and low funding cost", "Pure-play exposure to renewable financing", "Strong loan-book growth"],
+        "weaknesses": ["Sector-concentrated loan book", "Asset quality sensitive to project execution"],
+        "opportunities": ["India's 500 GW clean-energy target", "Green bonds and international climate finance"],
+        "threats": ["Interest-rate cycles", "Policy or tariff changes affecting RE viability"]
+      }
+    },
+    {
+      "slug": "mankind-pharma",
+      "companyName": "Mankind Pharma",
+      "sector": "Pharmaceuticals",
+      "status": "LISTED",
+      "year": 2023,
+      "openDate": "2023-04-25",
+      "closeDate": "2023-04-27",
+      "listingDate": "2023-05-09",
+      "issuePrice": 1080,
+      "listingPrice": 1300,
+      "gmp": 145,
+      "summary": "One of India's largest domestic-focused pharma companies, known for mass-market brands. A steady post-listing compounder.",
+      "overview": {
+        "introduction": "Mankind Pharma develops, manufactures and markets pharmaceutical formulations and consumer healthcare products, with a strong presence in the domestic chronic and acute therapy markets.",
+        "businessModel": "Primarily domestic prescription and OTC sales through an extensive field force, with affordable mass-market brands driving volume-led growth.",
+        "industryAnalysis": "The Indian pharma market is structurally growing on rising incomes, insurance penetration and chronic-disease prevalence.",
+        "promoters": ["Ramesh Juneja", "Rajeev Juneja", "Sheetal Arora"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 4326,
+        "priceBandLow": 1026,
+        "priceBandHigh": 1080,
+        "lotSize": 13,
+        "subscription": { "overall": 15.3, "retail": 0.9, "qib": 49.1, "nii": 3.8 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 7782, "profitCr": 1453, "ebitdaCr": 1900, "netWorthCr": 6100, "debtCr": 80 },
+        { "year": "FY23", "revenueCr": 8749, "profitCr": 1310, "ebitdaCr": 1850, "netWorthCr": 7400, "debtCr": 60 },
+        { "year": "FY24", "revenueCr": 10335, "profitCr": 1941, "ebitdaCr": 2550, "netWorthCr": 9300, "debtCr": 1500 }
+      ],
+      "cagrRevenue": 15.3,
+      "market": {
+        "currentPrice": 2380,
+        "week52High": 2870,
+        "week52Low": 1808,
+        "marketCapCr": 95300,
+        "peRatio": 49.1,
+        "roe": 20.9,
+        "roce": 24.8,
+        "dividendYield": 0.1
+      },
+      "priceHistory": [
+        { "date": "2023-05-09", "price": 1300 },
+        { "date": "2023-09-30", "price": 1780 },
+        { "date": "2024-03-31", "price": 2080 },
+        { "date": "2024-09-30", "price": 2700 },
+        { "date": "2025-03-31", "price": 2450 },
+        { "date": "2025-06-30", "price": 2380 }
+      ],
+      "news": [
+        { "date": "2025-05-22", "title": "Mankind reports double-digit revenue growth in FY25", "source": "Business Standard" },
+        { "date": "2024-07-25", "title": "Completes acquisition to enter premium chronic segment", "source": "Economic Times" }
+      ],
+      "swot": {
+        "strengths": ["Strong domestic brand portfolio", "Wide distribution reach", "Healthy margins and low debt historically"],
+        "weaknesses": ["Limited export diversification", "Acquisition-led debt increase"],
+        "opportunities": ["Premiumisation in chronic therapies", "Consumer healthcare expansion"],
+        "threats": ["Price controls (NLEM)", "Intense generic competition"]
+      }
+    },
+    {
+      "slug": "jsw-infrastructure",
+      "companyName": "JSW Infrastructure",
+      "sector": "Infrastructure",
+      "status": "LISTED",
+      "year": 2023,
+      "openDate": "2023-09-25",
+      "closeDate": "2023-09-27",
+      "listingDate": "2023-10-03",
+      "issuePrice": 119,
+      "listingPrice": 143,
+      "gmp": 22,
+      "summary": "India's second-largest commercial port operator, part of the JSW Group, with a fast-growing cargo handling network.",
+      "overview": {
+        "introduction": "JSW Infrastructure operates ports and port terminals handling diverse cargo, providing maritime-related services across India's coastline.",
+        "businessModel": "Earns tariff-based revenue on cargo throughput, anchored by JSW Group volumes (steel, energy) with a growing third-party customer mix.",
+        "industryAnalysis": "Rising EXIM trade and the Sagarmala programme support long-term growth in private port capacity.",
+        "promoters": ["Sajjan Jindal family (JSW Group)"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 2800,
+        "priceBandLow": 113,
+        "priceBandHigh": 119,
+        "lotSize": 126,
+        "subscription": { "overall": 37.4, "retail": 9.5, "qib": 80.1, "nii": 16.3 }
+      },
+      "financials": [
+        { "year": "FY22", "revenueCr": 2273, "profitCr": 330, "ebitdaCr": 1180, "netWorthCr": 4900, "debtCr": 4100 },
+        { "year": "FY23", "revenueCr": 3375, "profitCr": 750, "ebitdaCr": 1700, "netWorthCr": 5700, "debtCr": 4300 },
+        { "year": "FY24", "revenueCr": 3925, "profitCr": 902, "ebitdaCr": 2050, "netWorthCr": 9200, "debtCr": 3800 }
+      ],
+      "cagrRevenue": 31.4,
+      "market": {
+        "currentPrice": 295,
+        "week52High": 348,
+        "week52Low": 227,
+        "marketCapCr": 61900,
+        "peRatio": 60.2,
+        "roe": 12.4,
+        "roce": 14.0,
+        "dividendYield": 0.0
+      },
+      "priceHistory": [
+        { "date": "2023-10-03", "price": 143 },
+        { "date": "2023-12-31", "price": 195 },
+        { "date": "2024-06-30", "price": 280 },
+        { "date": "2024-12-31", "price": 305 },
+        { "date": "2025-03-31", "price": 270 },
+        { "date": "2025-06-30", "price": 295 }
+      ],
+      "news": [
+        { "date": "2025-04-15", "title": "JSW Infra crosses record annual cargo volume", "source": "Mint" },
+        { "date": "2024-10-30", "title": "Expands terminal capacity at east-coast port", "source": "Moneycontrol" }
+      ],
+      "swot": {
+        "strengths": ["Captive JSW Group cargo base", "Long concession tenures", "Strong EBITDA margins"],
+        "weaknesses": ["Group-volume dependence", "Capital-intensive expansion"],
+        "opportunities": ["Third-party cargo diversification", "Logistics and storage value-add"],
+        "threats": ["Commodity-cycle volatility", "Regulatory tariff changes"]
+      }
+    }
+  ]
+}

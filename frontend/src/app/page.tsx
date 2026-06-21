@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search, Rocket } from 'lucide-react';
 
 interface SignalRow {
   id: string;
@@ -153,6 +154,12 @@ export default function Dashboard() {
               <div>{status.signalCount} signals in dataset</div>
             </div>
           )}
+          <Link
+            href="/ipo"
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold px-4 py-2 rounded-lg text-sm transition"
+          >
+            <Rocket className="w-4 h-4" /> IPO Tracker
+          </Link>
           <button
             onClick={fetchSignals}
             className="flex items-center gap-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 px-4 py-2 rounded-lg text-sm transition"

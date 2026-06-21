@@ -1,0 +1,102 @@
+{
+  "year": 2027,
+  "ipos": [
+    {
+      "slug": "flipkart-india",
+      "companyName": "Flipkart Internet",
+      "sector": "Internet",
+      "status": "UPCOMING",
+      "year": 2027,
+      "openDate": "2027-03-15",
+      "closeDate": "2027-03-18",
+      "issuePrice": 0,
+      "summary": "India's homegrown e-commerce major, expected to pursue a domestic listing after relocating its holding structure to India. A landmark consumer-internet IPO.",
+      "overview": {
+        "introduction": "Flipkart is one of India's largest e-commerce marketplaces, spanning online retail, fashion (Myntra) and fintech partnerships.",
+        "businessModel": "Earns marketplace commissions, advertising and logistics revenue across a vast seller and buyer network.",
+        "industryAnalysis": "Indian e-commerce penetration is still low versus developed markets, leaving a long growth runway.",
+        "promoters": ["Walmart Inc."]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 30000,
+        "priceBandLow": 0,
+        "priceBandHigh": 0,
+        "lotSize": 0
+      },
+      "financials": [
+        { "year": "FY25", "revenueCr": 17900, "profitCr": -2350, "ebitdaCr": -1800, "netWorthCr": 22000, "debtCr": 500 },
+        { "year": "FY26", "revenueCr": 22000, "profitCr": -1500, "ebitdaCr": -900, "netWorthCr": 26000, "debtCr": 600 }
+      ],
+      "cagrRevenue": 22.9,
+      "market": {
+        "currentPrice": 0,
+        "week52High": 0,
+        "week52Low": 0,
+        "marketCapCr": 0,
+        "peRatio": null,
+        "roe": null,
+        "roce": null,
+        "dividendYield": null
+      },
+      "priceHistory": [],
+      "news": [
+        { "date": "2027-01-20", "title": "Flipkart completes shift of holding company to India", "source": "Economic Times" }
+      ],
+      "swot": {
+        "strengths": ["Scale and brand in Indian e-commerce", "Walmart backing", "Strong logistics network"],
+        "weaknesses": ["Sustained losses", "High competitive intensity"],
+        "opportunities": ["Tier-2/3 expansion", "Advertising and fintech monetisation"],
+        "threats": ["Competition from Amazon and quick-commerce", "Regulatory scrutiny on FDI retail"]
+      }
+    },
+    {
+      "slug": "national-stock-exchange",
+      "companyName": "National Stock Exchange (NSE)",
+      "sector": "Financial Services",
+      "status": "UPCOMING",
+      "year": 2027,
+      "openDate": "2027-05-10",
+      "closeDate": "2027-05-13",
+      "issuePrice": 0,
+      "gmp": 0,
+      "summary": "The world's largest derivatives exchange by volume finally heading to its own listing after long-running regulatory clearances. A landmark market-infrastructure IPO.",
+      "overview": {
+        "introduction": "NSE operates India's leading stock exchange, offering trading, clearing and market-data services across equities, derivatives and debt.",
+        "businessModel": "Earns transaction charges, listing fees, data and technology revenue, benefiting from high market volumes and strong operating leverage.",
+        "industryAnalysis": "Rising retail participation and derivatives volumes underpin structural growth for exchange infrastructure.",
+        "promoters": ["Diversified shareholding (no single promoter)"]
+      },
+      "ipoDetails": {
+        "issueSizeCr": 25000,
+        "priceBandLow": 0,
+        "priceBandHigh": 0,
+        "lotSize": 0
+      },
+      "financials": [
+        { "year": "FY25", "revenueCr": 17100, "profitCr": 12200, "ebitdaCr": 14000, "netWorthCr": 26000, "debtCr": 0 },
+        { "year": "FY26", "revenueCr": 19500, "profitCr": 13800, "ebitdaCr": 16000, "netWorthCr": 30000, "debtCr": 0 }
+      ],
+      "cagrRevenue": 14.0,
+      "market": {
+        "currentPrice": 0,
+        "week52High": 0,
+        "week52Low": 0,
+        "marketCapCr": 0,
+        "peRatio": null,
+        "roe": null,
+        "roce": null,
+        "dividendYield": null
+      },
+      "priceHistory": [],
+      "news": [
+        { "date": "2027-02-14", "title": "NSE receives final nod to proceed with IPO", "source": "Business Standard" }
+      ],
+      "swot": {
+        "strengths": ["Dominant market share", "High margins and zero debt", "Strong operating leverage"],
+        "weaknesses": ["Revenue tied to market volumes", "Regulatory dependence"],
+        "opportunities": ["Growing derivatives and data revenue", "New product launches"],
+        "threats": ["Regulatory caps on F&O", "Volume cyclicality"]
+      }
+    }
+  ]
+}
