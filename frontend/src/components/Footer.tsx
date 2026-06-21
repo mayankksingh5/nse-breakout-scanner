@@ -35,7 +35,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 border-t border-slate-200 pt-4 text-center text-xs text-slate-400 dark:border-slate-800 dark:text-slate-500">
-          © 2026 StockFinder NSE. All Rights Reserved.
+          © 2026 StockFinder. All Rights Reserved.
         </div>
       </div>
     </footer>
