@@ -23,23 +23,31 @@ Every `git push` to `main` auto-redeploys.
 
 ---
 
+**Live URL:** https://stockfinder-nse.vercel.app
+
 ## Refreshing the data (run on your own machine)
 
 The numbers come from a committed dataset (`frontend/src/data/signals.json`).
-To update it with the latest market data:
+To update it with the latest market data and republish:
 
 ```bash
+# 1. Scan live locally (~40s) and write the new dataset
 cd backend
-npm install        # first time only
-npm run refresh    # runs a full local scan (~40s), writes the new dataset
+npm install            # first time only
+npm run refresh
 
+# 2. Save it to git (good practice / backup)
 cd ..
-git add -A
-git commit -m "refresh data"
-git push           # Vercel redeploys automatically
+git add -A && git commit -m "refresh data" && git push
+
+# 3. Push the new build to the live site
+cd frontend
+vercel deploy --prod --yes
+vercel alias set <the-url-it-prints> stockfinder-nse.vercel.app
 ```
 
-Do this whenever you want fresh signals (e.g. after market close).
+The last line re-points your `stockfinder-nse` link at the fresh build.
+Do this whenever you want updated signals (e.g. after market close).
 
 ---
 
