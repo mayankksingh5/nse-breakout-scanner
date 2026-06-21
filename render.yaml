@@ -1,0 +1,20 @@
+# Render blueprint for the scanner backend.
+# In Render: New + > Blueprint > pick this repo. It reads this file.
+services:
+  - type: web
+    name: nse-breakout-scanner-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm run start
+    healthCheckPath: /api/status
+    autoDeploy: true
+    envVars:
+      - key: MIN_MARKET_CAP_CR
+        value: "5000"
+      # Optional Telegram alerts — set these in the Render dashboard, not here.
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false

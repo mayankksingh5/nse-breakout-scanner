@@ -89,6 +89,25 @@ interface QuoteInfo {
   volume: number;
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Retry a Yahoo call a few times with exponential backoff. Yahoo occasionally
+// rate-limits or returns transient errors, especially from cloud IPs.
+async function withRetry<T>(fn: () => Promise<T>, attempts = 3, baseMs = 500): Promise<T> {
+  let lastErr: any;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn();
+    } catch (err: any) {
+      lastErr = err;
+      // A genuine "delisted / no data" is not worth retrying.
+      if (/delisted|not found|No data/i.test(err?.message || '')) throw err;
+      if (i < attempts - 1) await sleep(baseMs * Math.pow(2, i));
+    }
+  }
+  throw lastErr;
+}
+
 // Step 1: batched quotes -> market cap filter.
 async function fetchMarketCaps(universe: UniverseStock[]): Promise<QuoteInfo[]> {
   const bySymbol = new Map(universe.map((s) => [s.yahooSymbol, s]));
@@ -98,7 +117,7 @@ async function fetchMarketCaps(universe: UniverseStock[]): Promise<QuoteInfo[]> 
   for (let b = 0; b < batches.length; b++) {
     const symbols = batches[b].map((s) => s.yahooSymbol);
     try {
-      const quotes = await yahoo.quote(symbols);
+      const quotes = await withRetry(() => yahoo.quote(symbols));
       const list = Array.isArray(quotes) ? quotes : [quotes];
       for (const q of list) {
         const stock = bySymbol.get(q.symbol as string);
@@ -126,7 +145,7 @@ async function analyze(info: QuoteInfo): Promise<Signal | null> {
   const period1 = new Date(Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000);
   let history: OHLCV[];
   try {
-    const chart = await yahoo.chart(info.stock.yahooSymbol, { period1, interval: '1d' });
+    const chart: any = await withRetry(() => yahoo.chart(info.stock.yahooSymbol, { period1, interval: '1d' }));
     history = (chart.quotes || [])
       .filter((q: any) => q.close != null && q.high != null && q.volume != null)
       .map((q: any) => ({

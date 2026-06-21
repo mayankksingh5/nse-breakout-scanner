@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 // Proxy to the scanner backend so the browser stays same-origin (no CORS).
 const BACKEND = process.env.BACKEND_URL || 'http://localhost:5000';
 
+// Allow time for a free-tier backend to wake from cold start.
+export const maxDuration = 30;
+
 export async function GET(req: NextRequest) {
   const qs = req.nextUrl.search; // forward all filter query params as-is
   try {

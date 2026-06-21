@@ -14,10 +14,23 @@ const NSE_EQUITY_LIST_URL =
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const CACHE_FILE = path.join(DATA_DIR, 'universe.json');
+const BUNDLED_FILE = path.join(process.cwd(), 'src', 'data', 'nse_universe.json');
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // refresh the symbol list once a day
 
 function ensureDataDir() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+// Offline fallback that ships with the repo, used if NSE is unreachable
+// (e.g. it blocks the cloud server's IP).
+function readBundled(): UniverseStock[] | null {
+  try {
+    if (!fs.existsSync(BUNDLED_FILE)) return null;
+    const parsed = JSON.parse(fs.readFileSync(BUNDLED_FILE, 'utf-8')) as UniverseStock[];
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+  } catch {
+    return null;
+  }
 }
 
 // Parse the NSE EQUITY_L.csv into our universe shape.
@@ -60,6 +73,17 @@ function readCache(): UniverseStock[] | null {
   }
 }
 
+// Read the cache regardless of age (used only as a download fallback).
+function readCacheIgnoreTtl(): UniverseStock[] | null {
+  try {
+    if (!fs.existsSync(CACHE_FILE)) return null;
+    const parsed = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8')) as UniverseStock[];
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
 function writeCache(stocks: UniverseStock[]) {
   try {
     ensureDataDir();
@@ -82,26 +106,43 @@ export async function getUniverse(forceRefresh = false): Promise<UniverseStock[]
     }
   }
 
-  console.log('[universe] downloading fresh NSE equity list...');
-  const res = await axios.get<string>(NSE_EQUITY_LIST_URL, {
-    timeout: 30000,
-    responseType: 'text',
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
-      Accept: 'text/csv,*/*',
-    },
-  });
+  // Try a fresh download from NSE, but never let a failure stop the scan:
+  // fall back to any cache, then to the bundled list.
+  try {
+    console.log('[universe] downloading fresh NSE equity list...');
+    const res = await axios.get<string>(NSE_EQUITY_LIST_URL, {
+      timeout: 30000,
+      responseType: 'text',
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+        Accept: 'text/csv,*/*',
+      },
+    });
 
-  const stocks = parseCsv(res.data);
-  if (stocks.length === 0) {
-    // Don't overwrite a good cache with an empty result.
-    const cached = readCache();
-    if (cached) return cached;
-    throw new Error('NSE equity list returned no usable rows');
+    const stocks = parseCsv(res.data);
+    if (stocks.length > 0) {
+      writeCache(stocks);
+      console.log(`[universe] loaded ${stocks.length} EQ-series stocks from NSE`);
+      return stocks;
+    }
+    console.warn('[universe] NSE returned no usable rows; falling back');
+  } catch (err: any) {
+    console.warn(`[universe] NSE download failed (${err.message}); falling back`);
   }
 
-  writeCache(stocks);
-  console.log(`[universe] loaded ${stocks.length} EQ-series stocks`);
-  return stocks;
+  // Fallbacks: stale cache first, then the bundled list.
+  const staleCache = readCacheIgnoreTtl();
+  if (staleCache) {
+    console.log(`[universe] using stale cached list (${staleCache.length} stocks)`);
+    return staleCache;
+  }
+
+  const bundled = readBundled();
+  if (bundled) {
+    console.log(`[universe] using bundled fallback list (${bundled.length} stocks)`);
+    return bundled;
+  }
+
+  throw new Error('No NSE universe available (download, cache, and bundle all failed)');
 }

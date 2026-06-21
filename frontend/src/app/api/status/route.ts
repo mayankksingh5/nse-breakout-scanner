@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 const BACKEND = process.env.BACKEND_URL || 'http://localhost:5000';
 
+export const maxDuration = 30;
+
 export async function GET() {
   try {
     const res = await fetch(`${BACKEND}/api/status`, { cache: 'no-store' });
