@@ -46,6 +46,7 @@ export default function Dashboard() {
   const [data, setData] = useState<SignalRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [status, setStatus] = useState<ScanStatus | null>(null);
+  const [showWelcome, setShowWelcome] = useState<boolean>(true);
 
   // Filters
   const [minMarketCapCr, setMinMarketCapCr] = useState<number>(5000);
@@ -100,6 +101,43 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 p-6 font-sans">
+      {/* Welcome splash — shown first to every visitor */}
+      {showWelcome && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm p-6">
+          <div className="relative max-w-md w-full bg-gradient-to-b from-slate-900 to-slate-950 border border-emerald-800/60 rounded-2xl shadow-2xl shadow-emerald-950/40 p-8 text-center animate-[fadeIn_0.4s_ease-out]">
+            <div className="text-xs tracking-[0.3em] text-emerald-500 font-semibold mb-3">WELCOME TO</div>
+            <h2 className="text-4xl font-extrabold tracking-tight text-emerald-400 mb-1">
+              ALPHA&#8209;SCANNER
+            </h2>
+            <p className="text-slate-400 text-sm mb-6">NSE India · Breakout Discovery System</p>
+
+            <div className="border-t border-slate-800 pt-6 space-y-4 text-left">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Chief Executive Officer</div>
+                  <div className="text-lg font-bold text-slate-100">Pratyush Tiwari</div>
+                </div>
+                <span className="text-xs font-semibold bg-emerald-950 text-emerald-400 border border-emerald-800 px-2.5 py-1 rounded">CA</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">Chief Technology Officer</div>
+                  <div className="text-lg font-bold text-slate-100">Mayank Kumar Singh</div>
+                </div>
+                <span className="text-xs font-semibold bg-cyan-950 text-cyan-400 border border-cyan-800 px-2.5 py-1 rounded">B.Tech</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowWelcome(false)}
+              className="mt-8 w-full bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2"
+            >
+              Enter Dashboard <ArrowUpRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Top banner */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 mb-6 gap-4">
         <div>
