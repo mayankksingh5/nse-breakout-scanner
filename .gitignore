@@ -1,0 +1,22 @@
+# dependencies
+**/node_modules/
+
+# builds
+**/dist/
+**/.next/
+**/out/
+
+# scanner data cache
+backend/data/
+
+# secrets / env
+**/.env
+**/.env.local
+**/.env*.local
+
+# logs
+**/*.log
+
+# os / editor
+.DS_Store
+Thumbs.db
