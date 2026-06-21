@@ -3,6 +3,12 @@ import { persist } from 'zustand/middleware';
 
 export type Theme = 'light' | 'dark';
 
+/** Top-level dashboard tabs. */
+export type AppTab = 'stocks' | 'ipo';
+
+/** Sub-views inside the IPO tab. */
+export type IpoView = 'overview' | 'upcoming' | 'calendar' | 'rankings' | 'watchlist' | 'compare';
+
 export type ReturnFilter = 'all' | 'positive' | 'negative';
 
 export type IpoSort = 'default' | 'gainers' | 'losers' | 'newest' | 'marketcap';
@@ -36,6 +42,14 @@ interface IpoState {
   toggleTheme: () => void;
   setTheme: (t: Theme) => void;
 
+  /** Active top-level tab (Stocks vs IPO). */
+  activeTab: AppTab;
+  setActiveTab: (t: AppTab) => void;
+
+  /** Active sub-view within the IPO tab. */
+  ipoView: IpoView;
+  setIpoView: (v: IpoView) => void;
+
   /** Slugs the user has favourited. */
   watchlist: string[];
   toggleWatch: (slug: string) => void;
@@ -58,6 +72,12 @@ export const useIpoStore = create<IpoState>()(
       theme: 'dark',
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
       setTheme: (t) => set({ theme: t }),
+
+      activeTab: 'stocks',
+      setActiveTab: (t) => set({ activeTab: t }),
+
+      ipoView: 'overview',
+      setIpoView: (v) => set({ ipoView: v }),
 
       watchlist: [],
       toggleWatch: (slug) =>
@@ -92,6 +112,8 @@ export const useIpoStore = create<IpoState>()(
         theme: s.theme,
         watchlist: s.watchlist,
         compare: s.compare,
+        activeTab: s.activeTab,
+        ipoView: s.ipoView,
       }),
     },
   ),

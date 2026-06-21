@@ -34,8 +34,8 @@ export default function IpoDetailPage() {
     return (
       <div className="py-20 text-center">
         <p className="text-lg font-semibold text-slate-700 dark:text-slate-200">IPO not found</p>
-        <Link href="/ipo" className="mt-3 inline-block text-sm text-emerald-600 hover:underline dark:text-emerald-400">
-          ← Back to all IPOs
+        <Link href="/" className="mt-3 inline-block text-sm text-emerald-600 hover:underline dark:text-emerald-400">
+          ← Back to dashboard
         </Link>
       </div>
     );
@@ -49,10 +49,10 @@ export default function IpoDetailPage() {
   return (
     <div className="space-y-6">
       <Link
-        href="/ipo"
+        href="/"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 print:hidden"
       >
-        <ArrowLeft className="h-4 w-4" /> All IPOs
+        <ArrowLeft className="h-4 w-4" /> Back to dashboard
       </Link>
 
       {/* Header */}
