@@ -1,56 +1,50 @@
 # Deploying the live link
 
-Two pieces get deployed:
+**Why this setup:** Yahoo Finance blocks requests from cloud/datacenter IPs
+(Render, Vercel, GitHub Actions all get `429 Failed to get crumb`). So we
+**scan locally** — where Yahoo works — and **serve the precomputed results**
+from the website. The dashboard is a single Next.js app on **Vercel**: instant
+loads, no backend, no cold starts.
 
-- **Backend** (the scanner) → **Render**
-- **Frontend** (the dashboard people see) → **Vercel**
-
-You deploy the backend first, then point the frontend at it.
-
----
-
-## Step 1 — Deploy the backend on Render
-
-1. Go to <https://render.com> and sign up / log in with your **GitHub** account.
-2. Click **New +** → **Blueprint**.
-3. Pick the repo **`mayankksingh5/nse-breakout-scanner`**. Render reads `render.yaml` automatically.
-4. Click **Apply**. It creates a service called `nse-breakout-scanner-api`.
-5. Wait for the first deploy to finish (a few minutes). When it's live, copy the URL — it looks like:
-
-   ```
-   https://nse-breakout-scanner-api.onrender.com
-   ```
-
-6. Test it: open `https://<your-render-url>/api/status` in a browser. You should see JSON.
-   The first scan runs automatically on startup (~40s), then `/api/signals` fills up.
-
-> Free tier note: the backend **sleeps after 15 min of no traffic**. The next visit wakes it
-> (takes ~30–60s and re-scans). That's normal for free hosting.
+The Express backend in `backend/` is now only a **local tool** to generate the
+dataset. It is not deployed.
 
 ---
 
-## Step 2 — Deploy the frontend on Vercel
+## Deploy the dashboard (Vercel)
 
-1. Go to <https://vercel.com> and sign up / log in with **GitHub**.
-2. Click **Add New…** → **Project**, then **Import** the same repo.
-3. In the import screen set:
-   - **Root Directory** → `frontend`   ← important
-   - Framework Preset → **Next.js** (auto-detected)
-4. Expand **Environment Variables** and add:
-   - **Name:** `BACKEND_URL`
-   - **Value:** your Render URL from Step 1 (e.g. `https://nse-breakout-scanner-api.onrender.com`)
-5. Click **Deploy**.
-6. When it finishes you get your public link, e.g. `https://nse-breakout-scanner.vercel.app`.
+1. Go to <https://vercel.com> → log in with **GitHub**.
+2. **Add New… → Project** → import **`nse-breakout-scanner`**.
+3. Set **Root Directory = `frontend`** (important). Framework auto-detects as Next.js.
+4. Click **Deploy**. No environment variables needed.
+5. You get a public link like `https://nse-breakout-scanner.vercel.app` — **that's what you share.**
 
-**That link is what you share.** Anyone who opens it sees the live dashboard.
+Every `git push` to `main` auto-redeploys.
 
 ---
 
-## Updating later
+## Refreshing the data (run on your own machine)
 
-Both Render and Vercel auto-deploy on every `git push` to `main`. Just push and they rebuild.
+The numbers come from a committed dataset (`frontend/src/data/signals.json`).
+To update it with the latest market data:
 
-## If the dashboard is empty
-- Give it a minute on first load (backend waking + scanning).
-- Click **Run Full Scan** in the top right.
-- Check `https://<render-url>/api/status` — if `error` is not null, the scan hit an issue.
+```bash
+cd backend
+npm install        # first time only
+npm run refresh    # runs a full local scan (~40s), writes the new dataset
+
+cd ..
+git add -A
+git commit -m "refresh data"
+git push           # Vercel redeploys automatically
+```
+
+Do this whenever you want fresh signals (e.g. after market close).
+
+---
+
+## The Render backend (optional / can be deleted)
+
+The earlier Render service can't fetch Yahoo data (cloud IP block), so it
+returns 0 signals and isn't used by the site. You can safely **delete it** in
+the Render dashboard. The `render.yaml` is kept only for reference.

@@ -1,24 +1,12 @@
 import { NextResponse } from 'next/server';
+import dataset from '@/data/signals.json';
 
-const BACKEND = process.env.BACKEND_URL || 'http://localhost:5000';
-
-export const maxDuration = 30;
-
+// Reports metadata about the bundled dataset (generated locally, served static).
 export async function GET() {
-  try {
-    const res = await fetch(`${BACKEND}/api/status`, { cache: 'no-store' });
-    return NextResponse.json(await res.json(), { status: res.status });
-  } catch {
-    return NextResponse.json({ error: 'backend unreachable' }, { status: 502 });
-  }
-}
-
-// Trigger a fresh scan on the backend.
-export async function POST() {
-  try {
-    const res = await fetch(`${BACKEND}/api/scan`, { method: 'POST', cache: 'no-store' });
-    return NextResponse.json(await res.json(), { status: res.status });
-  } catch {
-    return NextResponse.json({ error: 'backend unreachable' }, { status: 502 });
-  }
+  const d = dataset as { lastScanAt?: string; signals?: unknown[] };
+  return NextResponse.json({
+    lastScanAt: d.lastScanAt ?? null,
+    signalCount: d.signals?.length ?? 0,
+    source: 'precomputed',
+  });
 }

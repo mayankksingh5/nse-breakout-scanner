@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search, Activity } from 'lucide-react';
+import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search } from 'lucide-react';
 
 interface SignalRow {
   id: string;
@@ -22,13 +22,9 @@ interface SignalRow {
 }
 
 interface ScanStatus {
-  running: boolean;
   lastScanAt: string | null;
-  lastScanMs: number | null;
-  universeCount: number;
-  passedMarketCap: number;
   signalCount: number;
-  error: string | null;
+  source?: string;
 }
 
 // Format big share volumes -> 1.2M / 850K
@@ -97,17 +93,10 @@ export default function Dashboard() {
     return () => clearTimeout(t);
   }, [fetchSignals]);
 
-  // Poll scan status every 5s so progress shows while a scan runs
+  // Load dataset metadata (date / count) once.
   useEffect(() => {
     fetchStatus();
-    const i = setInterval(fetchStatus, 5000);
-    return () => clearInterval(i);
   }, [fetchStatus]);
-
-  const triggerScan = async () => {
-    await fetch('/api/status', { method: 'POST' });
-    fetchStatus();
-  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 p-6 font-sans">
@@ -122,18 +111,10 @@ export default function Dashboard() {
         <div className="flex flex-wrap items-center gap-3">
           {status?.lastScanAt && (
             <div className="text-xs text-slate-500 text-right">
-              <div>Last scan: {new Date(status.lastScanAt).toLocaleString('en-IN')}</div>
-              <div>{status.passedMarketCap} stocks scanned · {status.signalCount} signals</div>
+              <div>Data as of {new Date(status.lastScanAt).toLocaleString('en-IN')}</div>
+              <div>{status.signalCount} signals in dataset</div>
             </div>
           )}
-          <button
-            onClick={triggerScan}
-            disabled={status?.running}
-            className="flex items-center gap-2 bg-emerald-900/40 border border-emerald-700 hover:bg-emerald-800/50 disabled:opacity-50 px-4 py-2 rounded-lg text-sm transition text-emerald-300"
-          >
-            <Activity className={`w-4 h-4 ${status?.running ? 'animate-pulse' : ''}`} />
-            {status?.running ? 'Scanning…' : 'Run Full Scan'}
-          </button>
           <button
             onClick={fetchSignals}
             className="flex items-center gap-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 px-4 py-2 rounded-lg text-sm transition"
@@ -142,12 +123,6 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
-
-      {status?.running && (
-        <div className="mb-4 text-sm text-emerald-400 bg-emerald-950/40 border border-emerald-900 rounded-lg px-4 py-2">
-          Scan in progress — pulling live data from Yahoo Finance. Results will refresh automatically.
-        </div>
-      )}
 
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
@@ -269,7 +244,7 @@ export default function Dashboard() {
               ) : data.length === 0 ? (
                 <tr>
                   <td colSpan={12} className="text-center py-12 text-slate-500">
-                    No breakouts match these filters. {status?.lastScanAt ? '' : 'Try “Run Full Scan” to fetch live data.'}
+                    No breakouts match these filters. Try lowering the score or market-cap filter.
                   </td>
                 </tr>
               ) : (
