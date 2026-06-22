@@ -1,0 +1,77 @@
+name: Refresh market data
+
+# Fully automatic daily refresh of the stock dataset.
+#
+# Runs on GitHub's runners (not Vercel/Render), scans the market with the
+# existing backend tool, commits the regenerated dataset, and (if a Vercel
+# token is configured) publishes a fresh production deploy + re-points the
+# public alias. No PC, no paid API, no manual steps.
+#
+# NOTE: this only works if Yahoo Finance answers GitHub's runner IPs. If the
+# scan returns 0 signals the publish step fails on purpose and nothing is
+# committed, so a bad day never clobbers good data.
+
+on:
+  schedule:
+    # 10:35 UTC = 16:05 IST, Monday–Friday (after the 15:30 IST market close).
+    - cron: '35 10 * * 1-5'
+  workflow_dispatch: {} # allow manual "Run workflow" from the Actions tab
+
+permissions:
+  contents: write # needed to commit the refreshed dataset back to the repo
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      # Set this repo secret (Settings → Secrets and variables → Actions) to
+      # enable automatic publishing to the live site. Leave it unset to only
+      # commit the dataset to git.
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      # These are non-secret project identifiers (safe to inline).
+      VERCEL_ORG_ID: team_bjupo26NVZnemC0sjOGfd007
+      VERCEL_PROJECT_ID: prj_delg5bDrNWuljjnvlG5d2ua7VqbP
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Scan market and regenerate dataset
+        working-directory: backend
+        # Writes ../frontend/src/data/signals.json. Exits non-zero (failing the
+        # job) if the scan produced 0 signals — e.g. Yahoo blocked the runner.
+        run: npm run refresh
+
+      - name: Commit refreshed dataset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/src/data/signals.json
+          if git diff --cached --quiet; then
+            echo "Dataset unchanged — nothing to commit."
+          else
+            git commit -m "chore: refresh market data [skip ci]"
+            git push
+          fi
+
+      - name: Publish to Vercel (production)
+        if: ${{ env.VERCEL_TOKEN != '' }}
+        working-directory: frontend
+        run: |
+          url=$(npx --yes vercel deploy --prod --yes --token "$VERCEL_TOKEN" | tail -n1)
+          echo "Deployed: $url"
+          npx --yes vercel alias set "$url" stockfinder-nse.vercel.app --token "$VERCEL_TOKEN"
