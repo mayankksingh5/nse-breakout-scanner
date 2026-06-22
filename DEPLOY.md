@@ -1,13 +1,30 @@
 # Deploying the live link
 
-**Why this setup:** Yahoo Finance blocks requests from cloud/datacenter IPs
-(Render, Vercel, GitHub Actions all get `429 Failed to get crumb`). So we
-**scan locally** — where Yahoo works — and **serve the precomputed results**
-from the website. The dashboard is a single Next.js app on **Vercel**: instant
-loads, no backend, no cold starts.
+**Why this setup:** Yahoo Finance blocks requests from **Vercel/Render** server
+IPs (`429 Failed to get crumb`), so the website can't scan live. Instead we
+**scan elsewhere** and **serve precomputed results** as a committed dataset.
+The dashboard is a single Next.js app on **Vercel**: instant loads, no backend,
+no cold starts.
 
-The Express backend in `backend/` is now only a **local tool** to generate the
+The Express backend in `backend/` is the **scan tool** that generates the
 dataset. It is not deployed.
+
+## Automatic daily refresh (GitHub Actions) — preferred
+
+`.github/workflows/refresh-data.yml` runs the scan **on GitHub's runners**
+every weekday at **16:05 IST**, commits the fresh `signals.json`, then deploys
+to Vercel production and re-points the `stockfinder-nse.vercel.app` alias — all
+with **no PC, no paid API, and no manual steps**.
+
+- GitHub's runner IPs **are** served by Yahoo (Actions is *not* blocked the way
+  Vercel/Render are), so the scan works there.
+- Requires one repo secret, **`VERCEL_TOKEN`** (Settings → Secrets and
+  variables → Actions), so the workflow can publish. Already configured.
+- You can trigger it any time from the **Actions tab → "Refresh market data" →
+  Run workflow**. If a run's scan step ever fails (Yahoo rate-limit), nothing is
+  committed, so good data is never clobbered — just re-run it.
+
+The manual flow below remains as a fallback.
 
 ---
 
