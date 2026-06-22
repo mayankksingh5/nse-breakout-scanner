@@ -9,26 +9,27 @@ export function WelcomeSplash() {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-6 backdrop-blur-sm">
-      <div className="animate-[fadeIn_0.4s_ease-out] relative w-full max-w-md rounded-2xl border border-emerald-800/60 bg-gradient-to-b from-slate-900 to-slate-950 p-8 text-center shadow-2xl shadow-emerald-950/40">
-        <div className="mb-3 text-xs font-semibold tracking-[0.3em] text-emerald-500">WELCOME TO</div>
-        <h2 className="mb-1 text-4xl font-extrabold tracking-tight text-emerald-400">ALPHA&#8209;SCANNER</h2>
-        <p className="mb-6 text-sm text-slate-400">NSE India · Breakout &amp; IPO Discovery System</p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm sm:p-6">
+      <div className="animate-[fadeIn_0.4s_ease-out] relative w-full max-w-md rounded-2xl border border-emerald-800/60 bg-gradient-to-b from-slate-900 to-slate-950 p-6 text-center shadow-2xl shadow-emerald-950/40 sm:p-8">
+        <div className="mb-3 text-[10px] font-semibold tracking-[0.25em] text-emerald-500 sm:text-xs sm:tracking-[0.3em]">WELCOME TO</div>
+        <h2 className="mb-1 break-words text-3xl font-extrabold leading-tight tracking-tight text-emerald-400 sm:text-4xl">
+          ULTRA SCANNER
+        </h2>
+        <p className="mb-6 text-xs text-slate-400 sm:text-sm">Breakout &amp; IPO Discovery System</p>
 
         <div className="space-y-4 border-t border-slate-800 pt-6 text-left">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
               <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Chief Executive Officer</div>
-              <div className="text-lg font-bold text-slate-100">Pratyush Tiwari</div>
+              <div className="truncate text-lg font-bold text-slate-100">Pratyush Tiwari</div>
             </div>
-            <span className="rounded border border-emerald-800 bg-emerald-950 px-2.5 py-1 text-xs font-semibold text-emerald-400">CA</span>
           </div>
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
               <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Chief Technology Officer</div>
-              <div className="text-lg font-bold text-slate-100">Mayank Kumar Singh</div>
+              <div className="truncate text-lg font-bold text-slate-100">Mayank Kumar Singh</div>
             </div>
-            <span className="rounded border border-cyan-800 bg-cyan-950 px-2.5 py-1 text-xs font-semibold text-cyan-400">B.Tech</span>
+            <span className="shrink-0 rounded border border-cyan-800 bg-cyan-950 px-2.5 py-1 text-xs font-semibold text-cyan-400">B.Tech</span>
           </div>
         </div>
 

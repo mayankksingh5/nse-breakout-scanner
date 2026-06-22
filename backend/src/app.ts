@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { runScan, getSignals, getState } from './services/scanner';
+import { startScheduler } from './services/schedule';
 import { Signal } from './types';
 
 const app = express();
@@ -78,4 +79,6 @@ app.listen(PORT, () => {
   } else {
     console.log(`[startup] serving ${getSignals().length} cached signals; POST /api/scan to refresh`);
   }
+  // Arm the automatic end-of-day refresh (16:00 IST, weekdays).
+  startScheduler();
 });

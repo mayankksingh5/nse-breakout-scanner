@@ -17,6 +17,12 @@ import y2027 from './2027.json';
 // JSON loses our string-literal unions (status/sector), so cast on the boundary.
 const yearFiles = [y2023, y2024, y2025, y2026, y2027] as unknown as IpoYearFile[];
 
+/**
+ * When the curated IPO dataset was last reviewed/updated (ISO date).
+ * Bump this whenever the year files change so the UI shows an honest timestamp.
+ */
+export const IPO_DATA_UPDATED = '2026-06-21';
+
 /** Years exposed in the sidebar accordion, newest first. */
 export const IPO_YEARS = yearFiles
   .map((f) => f.year)

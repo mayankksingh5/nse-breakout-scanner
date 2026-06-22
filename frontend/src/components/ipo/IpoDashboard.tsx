@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, Rocket, CalendarDays, Trophy, Star, GitCompareArrows } from 'lucide-react';
+import { LayoutDashboard, Rocket, CalendarDays, Trophy, Star, GitCompareArrows, FileCheck2 } from 'lucide-react';
 import type { IpoView } from '@/store/useIpoStore';
 import { useIpoStore } from '@/store/useIpoStore';
 import { IpoSearch } from '@/components/ipo/IpoSearch';
@@ -10,6 +10,7 @@ import { CalendarView } from '@/components/ipo/views/CalendarView';
 import { RankingsView } from '@/components/ipo/views/RankingsView';
 import { WatchlistView } from '@/components/ipo/views/WatchlistView';
 import { CompareView } from '@/components/ipo/views/CompareView';
+import { AllotmentView } from '@/components/ipo/views/AllotmentView';
 
 const SUB_NAV: { key: IpoView; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -18,6 +19,7 @@ const SUB_NAV: { key: IpoView; label: string; icon: React.ComponentType<{ classN
   { key: 'rankings', label: 'Rankings', icon: Trophy },
   { key: 'watchlist', label: 'Watchlist', icon: Star },
   { key: 'compare', label: 'Compare', icon: GitCompareArrows },
+  { key: 'allotment', label: 'Allotment Status', icon: FileCheck2 },
 ];
 
 /** The IPO tab: global search + in-place secondary navigation between views. */
@@ -72,6 +74,7 @@ export function IpoDashboard() {
       {ipoView === 'rankings' && <RankingsView />}
       {ipoView === 'watchlist' && <WatchlistView />}
       {ipoView === 'compare' && <CompareView />}
+      {ipoView === 'allotment' && <AllotmentView />}
     </div>
   );
 }

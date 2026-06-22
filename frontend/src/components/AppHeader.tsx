@@ -26,8 +26,8 @@ export function AppHeader() {
             <LineChart className="h-5 w-5" />
           </div>
           <div className="hidden sm:block">
-            <div className="text-sm font-bold leading-tight text-slate-900 dark:text-slate-100">Alpha Terminal</div>
-            <div className="text-[11px] leading-tight text-slate-500 dark:text-slate-400">NSE India</div>
+            <div className="text-sm font-bold leading-tight text-slate-900 dark:text-slate-100">Ultra Scanner</div>
+            <div className="text-[11px] leading-tight text-slate-500 dark:text-slate-400">Breakout &amp; IPO Discovery</div>
           </div>
         </div>
 

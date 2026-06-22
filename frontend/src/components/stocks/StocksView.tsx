@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search, AlertTriangle } from 'lucide-react';
+import { getFreshness } from '@/lib/freshness';
 
 interface SignalRow {
   id: string;
@@ -42,10 +43,18 @@ function fmtCap(cr: number): string {
   return '₹' + cr.toLocaleString('en-IN') + ' Cr';
 }
 
+// Shared theme-aware styles for the filter/select controls.
+const CARD_CLS =
+  'rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900';
+const LABEL_CLS =
+  'mb-2 block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400';
+const SELECT_CLS =
+  'block w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-emerald-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200';
+
 /**
- * The NSE breakout scanner dashboard. Extracted from the old homepage so it can
- * live inside the Stocks tab and stay mounted (state + fetched data preserved)
- * while the user switches to the IPO tab.
+ * The Ultra Scanner breakout dashboard. Theme-aware (light + dark) so it stays
+ * consistent with the rest of the app, and stays mounted (state + fetched data
+ * preserved) while the user switches to the IPO tab.
  */
 export function StocksView() {
   const [data, setData] = useState<SignalRow[]>([]);
@@ -103,40 +112,56 @@ export function StocksView() {
     fetchStatus();
   }, [fetchStatus]);
 
+  const freshness = getFreshness(status?.lastScanAt);
+
   return (
-    <div className="bg-slate-950 text-slate-50 p-6 font-sans">
+    <div className="bg-slate-50 p-6 font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-50">
       {/* Top banner */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 mb-6 gap-4">
+      <div className="mb-6 flex flex-col items-start justify-between gap-4 border-b border-slate-200 pb-6 dark:border-slate-800 md:flex-row md:items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2 text-emerald-400">
-            ALPHA-SCANNER <span className="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded">NSE INDIA</span>
+          <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
+            ULTRA SCANNER
           </h1>
-          <p className="text-slate-400 text-sm mt-1">Breakout discovery across every NSE stock above ₹5,000 Cr market cap</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Breakout discovery across every listed stock above ₹5,000 Cr market cap
+          </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          {status?.lastScanAt && (
-            <div className="text-xs text-slate-500 text-right">
-              <div>Data as of {new Date(status.lastScanAt).toLocaleString('en-IN')}</div>
-              <div>{status.signalCount} signals in dataset</div>
+          {freshness && (
+            <div className="text-right text-xs text-slate-500 dark:text-slate-400">
+              <div className="font-medium text-slate-700 dark:text-slate-300">{freshness.relative}</div>
+              <div>Data as of {freshness.absolute}</div>
+              <div>{status?.signalCount} signals in dataset</div>
             </div>
           )}
           <button
             onClick={fetchSignals}
-            className="flex items-center gap-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 px-4 py-2 rounded-lg text-sm transition"
+            className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /> Refresh
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Refresh
           </button>
         </div>
       </div>
 
+      {/* Stale-data warning */}
+      {freshness?.isStale && (
+        <div className="mb-6 flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>
+            This data is {freshness.ageDays} days old — the latest end-of-day refresh hasn&apos;t run yet.
+            Figures may not reflect the most recent market close.
+          </span>
+        </div>
+      )}
+
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-          <label className="text-xs text-slate-400 block mb-2 uppercase font-semibold">Min Market Cap</label>
+      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <div className={CARD_CLS}>
+          <label className={LABEL_CLS}>Min Market Cap</label>
           <select
             value={minMarketCapCr}
             onChange={(e) => setMinMarketCapCr(Number(e.target.value))}
-            className="bg-slate-950 border border-slate-800 text-sm rounded-lg block w-full p-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+            className={SELECT_CLS}
           >
             <option value={5000}>₹5,000 Cr+ (all eligible)</option>
             <option value={20000}>₹20,000 Cr+ (large mid)</option>
@@ -145,12 +170,12 @@ export function StocksView() {
           </select>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-          <label className="text-xs text-slate-400 block mb-2 uppercase font-semibold">Min Breakout Score</label>
+        <div className={CARD_CLS}>
+          <label className={LABEL_CLS}>Min Breakout Score</label>
           <select
             value={scoreFilter}
             onChange={(e) => setScoreFilter(Number(e.target.value))}
-            className="bg-slate-950 border border-slate-800 text-sm rounded-lg block w-full p-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+            className={SELECT_CLS}
           >
             <option value={85}>★ Strong Breakouts (&gt;=85)</option>
             <option value={70}>⚑ Active Watchlist (&gt;=70)</option>
@@ -158,12 +183,12 @@ export function StocksView() {
           </select>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-          <label className="text-xs text-slate-400 block mb-2 uppercase font-semibold">Volume Surge (today vs 1M)</label>
+        <div className={CARD_CLS}>
+          <label className={LABEL_CLS}>Volume Surge (today vs 1M)</label>
           <select
             value={volRatioFilter}
             onChange={(e) => setVolRatioFilter(Number(e.target.value))}
-            className="bg-slate-950 border border-slate-800 text-sm rounded-lg block w-full p-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+            className={SELECT_CLS}
           >
             <option value={0}>Any volume</option>
             <option value={1.5}>&gt; 1.5x</option>
@@ -172,13 +197,13 @@ export function StocksView() {
           </select>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-          <label className="text-xs text-slate-400 block mb-2 uppercase font-semibold">Avg Volume Period / Min</label>
+        <div className={CARD_CLS}>
+          <label className={LABEL_CLS}>Avg Volume Period / Min</label>
           <div className="flex gap-2">
             <select
               value={volPeriod}
               onChange={(e) => setVolPeriod(e.target.value)}
-              className="bg-slate-950 border border-slate-800 text-sm rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+              className={SELECT_CLS + ' w-auto'}
             >
               <option value="1m">1M</option>
               <option value="2m">2M</option>
@@ -187,7 +212,7 @@ export function StocksView() {
             <select
               value={minAvgVolume}
               onChange={(e) => setMinAvgVolume(Number(e.target.value))}
-              className="bg-slate-950 border border-slate-800 text-sm rounded-lg p-2.5 text-slate-200 w-full focus:outline-none focus:border-emerald-500"
+              className={SELECT_CLS}
             >
               <option value={0}>Any liquidity</option>
               <option value={100000}>&gt; 1L shares/day</option>
@@ -197,32 +222,32 @@ export function StocksView() {
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+        <div className={CARD_CLS + ' flex items-center justify-between'}>
           <div>
-            <span className="text-xs text-slate-400 block uppercase font-semibold">Identified</span>
-            <span className="text-2xl font-bold text-slate-100">{data.length}</span>
-            <span className="text-slate-500 text-sm"> stocks</span>
+            <span className="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">Identified</span>
+            <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">{data.length}</span>
+            <span className="text-sm text-slate-500"> stocks</span>
           </div>
-          <Layers className="w-8 h-8 text-slate-700" />
+          <Layers className="h-8 w-8 text-slate-300 dark:text-slate-700" />
         </div>
       </div>
 
       {/* Search */}
-      <div className="mb-4 relative max-w-sm">
-        <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+      <div className="relative mb-4 max-w-sm">
+        <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search symbol or company…"
-          className="bg-slate-900 border border-slate-800 text-sm rounded-lg w-full pl-9 pr-3 py-2.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+          className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 focus:border-emerald-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
         />
       </div>
 
       {/* Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:shadow-2xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-slate-950 text-slate-400 uppercase text-[11px] tracking-wider border-b border-slate-800">
+          <table className="w-full whitespace-nowrap text-left text-sm">
+            <thead className="border-b border-slate-200 bg-slate-100 text-[11px] uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
               <tr>
                 <th className="px-4 py-4">Symbol</th>
                 <th className="px-4 py-4">Price</th>
@@ -238,61 +263,61 @@ export function StocksView() {
                 <th className="px-4 py-4 text-right">Signal</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
               {loading ? (
                 <tr>
-                  <td colSpan={12} className="text-center py-12 text-slate-500">
-                    <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2" />
+                  <td colSpan={12} className="py-12 text-center text-slate-500">
+                    <RefreshCw className="mx-auto mb-2 h-6 w-6 animate-spin" />
                     Loading signals…
                   </td>
                 </tr>
               ) : data.length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="text-center py-12 text-slate-500">
+                  <td colSpan={12} className="py-12 text-center text-slate-500">
                     No breakouts match these filters. Try lowering the score or market-cap filter.
                   </td>
                 </tr>
               ) : (
                 data.map((row) => (
-                  <tr key={row.id} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="px-4 py-3 font-semibold text-slate-200">
+                  <tr key={row.id} className="transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/40">
+                    <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">
                       <div>{row.symbol}</div>
-                      <div className="text-[11px] font-normal text-slate-500 truncate max-w-[160px]">{row.company_name}</div>
+                      <div className="max-w-[160px] truncate text-[11px] font-normal text-slate-500">{row.company_name}</div>
                     </td>
                     <td className="px-4 py-3 font-mono font-medium">₹{Number(row.current_price).toFixed(2)}</td>
                     <td className="px-4 py-3 font-mono">
-                      <span className={row.price_change_pct >= 0 ? 'text-emerald-400 font-medium' : 'text-rose-400'}>
+                      <span className={row.price_change_pct >= 0 ? 'font-medium text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
                         {row.price_change_pct >= 0 ? '+' : ''}{Number(row.price_change_pct).toFixed(2)}%
                       </span>
                     </td>
-                    <td className="px-4 py-3 font-mono text-slate-300">{fmtCap(row.market_cap_cr)}</td>
-                    <td className="px-4 py-3 font-mono text-slate-300">₹{Number(row.resistance_price).toFixed(2)}</td>
+                    <td className="px-4 py-3 font-mono text-slate-600 dark:text-slate-300">{fmtCap(row.market_cap_cr)}</td>
+                    <td className="px-4 py-3 font-mono text-slate-600 dark:text-slate-300">₹{Number(row.resistance_price).toFixed(2)}</td>
                     <td className="px-4 py-3 font-mono">
-                      <span className={`px-2 py-0.5 rounded text-xs ${row.distance_pct <= 2 && row.distance_pct >= -0.5 ? 'bg-amber-950 text-amber-400 border border-amber-900' : 'text-slate-400'}`}>
+                      <span className={`rounded px-2 py-0.5 text-xs ${row.distance_pct <= 2 && row.distance_pct >= -0.5 ? 'border border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-400' : 'text-slate-500 dark:text-slate-400'}`}>
                         {Number(row.distance_pct).toFixed(2)}%
                       </span>
                     </td>
-                    <td className={`px-4 py-3 font-mono ${volPeriod === '1m' ? 'text-cyan-300' : 'text-slate-400'}`}>{fmtVol(row.avg_volume_1m)}</td>
-                    <td className={`px-4 py-3 font-mono ${volPeriod === '2m' ? 'text-cyan-300' : 'text-slate-400'}`}>{fmtVol(row.avg_volume_2m)}</td>
-                    <td className={`px-4 py-3 font-mono ${volPeriod === '3m' ? 'text-cyan-300' : 'text-slate-400'}`}>{fmtVol(row.avg_volume_3m)}</td>
+                    <td className={`px-4 py-3 font-mono ${volPeriod === '1m' ? 'text-cyan-600 dark:text-cyan-300' : 'text-slate-500 dark:text-slate-400'}`}>{fmtVol(row.avg_volume_1m)}</td>
+                    <td className={`px-4 py-3 font-mono ${volPeriod === '2m' ? 'text-cyan-600 dark:text-cyan-300' : 'text-slate-500 dark:text-slate-400'}`}>{fmtVol(row.avg_volume_2m)}</td>
+                    <td className={`px-4 py-3 font-mono ${volPeriod === '3m' ? 'text-cyan-600 dark:text-cyan-300' : 'text-slate-500 dark:text-slate-400'}`}>{fmtVol(row.avg_volume_3m)}</td>
                     <td className="px-4 py-3 font-mono">
-                      <span className={`font-semibold ${row.volume_ratio >= 2.0 ? 'text-cyan-400' : 'text-slate-300'}`}>
+                      <span className={`font-semibold ${row.volume_ratio >= 2.0 ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-600 dark:text-slate-300'}`}>
                         {Number(row.volume_ratio).toFixed(2)}x
                       </span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <div className="inline-block px-3 py-1 bg-slate-950 rounded-full border border-slate-800 font-mono font-bold text-emerald-400">
+                      <div className="inline-block rounded-full border border-slate-200 bg-slate-100 px-3 py-1 font-mono font-bold text-emerald-600 dark:border-slate-800 dark:bg-slate-950 dark:text-emerald-400">
                         {row.breakout_score}
                       </div>
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <span className={`inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-md ${
-                        row.signal_type === 'STRONG_BUY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                        row.signal_type === 'BREAKOUT_WATCH' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                        'bg-slate-800 text-slate-400'
+                      <span className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-bold ${
+                        row.signal_type === 'STRONG_BUY' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' :
+                        row.signal_type === 'BREAKOUT_WATCH' ? 'border border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400' :
+                        'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                       }`}>
-                        {row.signal_type === 'STRONG_BUY' && <ArrowUpRight className="w-3.5 h-3.5" />}
-                        {row.signal_type === 'BREAKOUT_WATCH' && <ShieldAlert className="w-3.5 h-3.5" />}
+                        {row.signal_type === 'STRONG_BUY' && <ArrowUpRight className="h-3.5 w-3.5" />}
+                        {row.signal_type === 'BREAKOUT_WATCH' && <ShieldAlert className="h-3.5 w-3.5" />}
                         {row.signal_type.replace('_', ' ')}
                       </span>
                     </td>
@@ -304,7 +329,7 @@ export function StocksView() {
         </div>
       </div>
 
-      <p className="text-xs text-slate-600 mt-4">
+      <p className="mt-4 text-xs text-slate-500 dark:text-slate-600">
         Data: Yahoo Finance (end-of-day). Not investment advice — for research only.
       </p>
     </div>

@@ -7,7 +7,14 @@ export type Theme = 'light' | 'dark';
 export type AppTab = 'stocks' | 'ipo';
 
 /** Sub-views inside the IPO tab. */
-export type IpoView = 'overview' | 'upcoming' | 'calendar' | 'rankings' | 'watchlist' | 'compare';
+export type IpoView =
+  | 'overview'
+  | 'upcoming'
+  | 'calendar'
+  | 'rankings'
+  | 'watchlist'
+  | 'compare'
+  | 'allotment';
 
 export type ReturnFilter = 'all' | 'positive' | 'negative';
 

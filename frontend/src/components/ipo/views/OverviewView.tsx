@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import Link from 'next/link';
 import { TrendingUp, TrendingDown, Layers, Rocket } from 'lucide-react';
-import { ALL_IPOS, rankByReturn } from '@/data/ipo';
+import { ALL_IPOS, rankByReturn, IPO_DATA_UPDATED } from '@/data/ipo';
 import { currentReturnPct } from '@/types/ipo';
 import { useIpoStore } from '@/store/useIpoStore';
 import { applyIpoFilters } from '@/lib/filterIpos';
@@ -42,6 +42,15 @@ export function OverviewView() {
         subtitle="Every Indian IPO, year-wise — listings, returns, fundamentals and charts."
         actions={<ExportButtons ipos={filtered} filename="all-ipos.csv" />}
       />
+
+      <p className="-mt-2 mb-6 text-xs text-slate-400 dark:text-slate-500">
+        IPO data last updated{' '}
+        {new Date(IPO_DATA_UPDATED).toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        })}
+      </p>
 
       {/* Hero stats */}
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
