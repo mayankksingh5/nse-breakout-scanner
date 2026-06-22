@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import cron from 'node-cron';
-import { runScan, getSignals, getState } from './scanner';
+import { runScan, getSignals, getIndices, getState } from './scanner';
 
 /**
  * Automatic end-of-day refresh.
@@ -31,7 +31,7 @@ function mirrorToFrontend() {
     if (!fs.existsSync(path.dirname(FRONTEND_SIGNALS))) return; // not running next to the frontend
     fs.writeFileSync(
       FRONTEND_SIGNALS,
-      JSON.stringify({ lastScanAt: getState().lastScanAt, signals }),
+      JSON.stringify({ lastScanAt: getState().lastScanAt, signals, indices: getIndices() }),
     );
     console.log(`[schedule] mirrored ${signals.length} signals to frontend dataset`);
   } catch (err) {

@@ -4,8 +4,9 @@ import pLimit from 'p-limit';
 import { yahoo } from '../lib/yahoo';
 import { getUniverse, UniverseStock } from './universe';
 import { QuantEngine } from './QuantEngine';
-import { OHLCV, Signal } from '../types';
+import { OHLCV, Signal, IndexQuote } from '../types';
 import { AlertManager } from './AlertManager';
+import { fetchIndices } from './indices';
 
 const ONE_CRORE = 10_000_000; // 1 crore = 10^7
 const MIN_MARKET_CAP_CR = Number(process.env.MIN_MARKET_CAP_CR || 5000);
@@ -42,6 +43,7 @@ const state: ScanState = {
 };
 
 let signals: Signal[] = [];
+let indices: IndexQuote[] = [];
 
 // ---- persistence so a server restart keeps the last scan ---------------------
 
@@ -50,6 +52,7 @@ function loadPersisted() {
     if (fs.existsSync(SIGNALS_FILE)) {
       const raw = JSON.parse(fs.readFileSync(SIGNALS_FILE, 'utf-8'));
       if (Array.isArray(raw.signals)) signals = raw.signals;
+      if (Array.isArray(raw.indices)) indices = raw.indices;
       if (raw.lastScanAt) state.lastScanAt = raw.lastScanAt;
       state.signalCount = signals.length;
       console.log(`[scanner] restored ${signals.length} signals from disk`);
@@ -64,7 +67,7 @@ function persist() {
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
     fs.writeFileSync(
       SIGNALS_FILE,
-      JSON.stringify({ lastScanAt: state.lastScanAt, signals }),
+      JSON.stringify({ lastScanAt: state.lastScanAt, signals, indices }),
       'utf-8'
     );
   } catch (err) {
@@ -207,6 +210,10 @@ export function getSignals(): Signal[] {
   return signals;
 }
 
+export function getIndices(): IndexQuote[] {
+  return indices;
+}
+
 export function getState(): ScanState {
   return state;
 }
@@ -251,6 +258,15 @@ export async function runScan(forceUniverseRefresh = false): Promise<ScanState> 
     fresh.sort((a, b) => b.breakout_score - a.breakout_score);
 
     signals = fresh;
+
+    // Pull the market indices for the dashboard's top strip. Isolated so an
+    // index failure never aborts the (much more expensive) stock scan.
+    try {
+      indices = await fetchIndices();
+    } catch (err: any) {
+      console.error('[scanner] index fetch failed:', err?.message || err);
+    }
+
     state.scannedCount = passed.length;
     state.signalCount = fresh.length;
     state.lastScanAt = new Date().toISOString();

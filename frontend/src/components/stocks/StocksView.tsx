@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search, AlertTriangle } from 'lucide-react';
 import { getFreshness } from '@/lib/freshness';
+import { MarketIndices } from '@/components/stocks/MarketIndices';
 
 interface SignalRow {
   id: string;
@@ -115,7 +116,11 @@ export function StocksView() {
   const freshness = getFreshness(status?.lastScanAt);
 
   return (
-    <div className="bg-slate-50 p-6 font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-50">
+    <div className="bg-slate-50 font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-50">
+      {/* Market indices strip — pinned at the very top of the Stocks page */}
+      <MarketIndices asOf={freshness?.absolute} />
+
+      <div className="p-6">
       {/* Top banner */}
       <div className="mb-6 flex flex-col items-start justify-between gap-4 border-b border-slate-200 pb-6 dark:border-slate-800 md:flex-row md:items-center">
         <div>
@@ -332,6 +337,7 @@ export function StocksView() {
       <p className="mt-4 text-xs text-slate-500 dark:text-slate-600">
         Data: Yahoo Finance (end-of-day). Not investment advice — for research only.
       </p>
+      </div>
     </div>
   );
 }

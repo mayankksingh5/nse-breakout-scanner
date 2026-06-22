@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { runScan, getSignals } from './services/scanner';
+import { runScan, getSignals, getIndices } from './services/scanner';
 
 /**
  * Runs a full scan locally (where Yahoo Finance is reachable) and writes the
@@ -22,6 +22,7 @@ async function main() {
   const payload = {
     lastScanAt: new Date().toISOString(),
     signals,
+    indices: getIndices(),
   };
 
   const target = path.join(process.cwd(), '..', 'frontend', 'src', 'data', 'signals.json');

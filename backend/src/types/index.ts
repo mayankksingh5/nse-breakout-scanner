@@ -24,6 +24,16 @@ export interface VolumeMetrics {
   volumeRatio1m: number; // today's volume / 1-month average
 }
 
+// One market index as served to the dashboard's indices strip.
+export interface IndexQuote {
+  name: string;            // display name, e.g. "NIFTY 50"
+  symbol: string;          // Yahoo symbol, e.g. "^NSEI"
+  group: 'NSE' | 'BSE';
+  value: number;           // current index level
+  change: number;          // absolute change vs previous close
+  change_pct: number;      // percentage change vs previous close
+}
+
 export type SignalType = 'STRONG_BUY' | 'BREAKOUT_WATCH' | 'MONITOR' | 'IGNORE';
 
 // One row as served to the dashboard.
