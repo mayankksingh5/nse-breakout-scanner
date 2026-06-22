@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search, AlertTriangle } from 'lucide-react';
 import { getFreshness } from '@/lib/freshness';
 import { MarketIndices } from '@/components/stocks/MarketIndices';
@@ -58,6 +59,7 @@ const SELECT_CLS =
  * preserved) while the user switches to the IPO tab.
  */
 export function StocksView() {
+  const router = useRouter();
   const [data, setData] = useState<SignalRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [status, setStatus] = useState<ScanStatus | null>(null);
@@ -284,8 +286,12 @@ export function StocksView() {
                 </tr>
               ) : (
                 data.map((row) => (
-                  <tr key={row.id} className="transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/40">
-                    <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">
+                  <tr
+                    key={row.id}
+                    onClick={() => router.push(`/stocks/${row.symbol}`)}
+                    className="cursor-pointer transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/40"
+                  >
+                    <td className="px-4 py-3 font-semibold text-emerald-700 dark:text-emerald-300">
                       <div>{row.symbol}</div>
                       <div className="max-w-[160px] truncate text-[11px] font-normal text-slate-500">{row.company_name}</div>
                     </td>

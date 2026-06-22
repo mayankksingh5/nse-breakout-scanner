@@ -90,6 +90,15 @@ interface QuoteInfo {
   marketCap: number;
   price: number;
   volume: number;
+  // Extra point-in-time fields for the stock detail page (free from the quote).
+  open?: number;
+  high?: number;
+  low?: number;
+  prevClose?: number;
+  week52High?: number;
+  week52Low?: number;
+  pe?: number;
+  eps?: number;
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -126,11 +135,20 @@ async function fetchMarketCaps(universe: UniverseStock[]): Promise<QuoteInfo[]> 
         const stock = bySymbol.get(q.symbol as string);
         const marketCap = (q.marketCap as number) || 0;
         if (!stock || marketCap < MIN_MARKET_CAP) continue;
+        const num = (v: any) => (v == null ? undefined : Number(Number(v).toFixed(2)));
         passed.push({
           stock,
           marketCap,
           price: (q.regularMarketPrice as number) || 0,
           volume: (q.regularMarketVolume as number) || 0,
+          open: num(q.regularMarketOpen),
+          high: num(q.regularMarketDayHigh),
+          low: num(q.regularMarketDayLow),
+          prevClose: num(q.regularMarketPreviousClose),
+          week52High: num(q.fiftyTwoWeekHigh),
+          week52Low: num(q.fiftyTwoWeekLow),
+          pe: num(q.trailingPE),
+          eps: num(q.epsTrailingTwelveMonths),
         });
       }
     } catch (err: any) {
@@ -201,6 +219,15 @@ async function analyze(info: QuoteInfo): Promise<Signal | null> {
     volume_ratio: Number(metrics.volumeRatio1m.toFixed(2)),
     breakout_score: score,
     signal_type: signal,
+    open: info.open,
+    high: info.high,
+    low: info.low,
+    prev_close: info.prevClose,
+    week52_high: info.week52High,
+    week52_low: info.week52Low,
+    pe: info.pe,
+    eps: info.eps,
+    volume: info.volume || metrics.currentVolume,
   };
 }
 

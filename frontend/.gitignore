@@ -33,6 +33,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# generated per-symbol price history — deployed by the refresh pipeline,
+# not committed (avoids large daily git churn). Re-created by `npm run refresh`.
+/public/history/
+
 # vercel
 .vercel
 

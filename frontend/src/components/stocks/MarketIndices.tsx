@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
 interface IndexRow {
   name: string;
+  slug: string;
   symbol: string;
   group: 'NSE' | 'BSE';
   value: number;
@@ -71,9 +73,10 @@ export function MarketIndices({ asOf }: { asOf?: string }) {
                   ? 'text-emerald-600 dark:text-emerald-400'
                   : 'text-rose-600 dark:text-rose-400';
                 return (
-                  <div
+                  <Link
                     key={idx.symbol}
-                    className="w-[160px] shrink-0 rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950"
+                    href={`/indices/${idx.slug}`}
+                    className="w-[160px] shrink-0 rounded-xl border border-slate-200 bg-slate-50 p-3 transition hover:border-emerald-400 hover:shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:hover:border-emerald-500"
                   >
                     <div className="flex items-center justify-between gap-1">
                       <span className="truncate text-xs font-semibold text-slate-700 dark:text-slate-200">
@@ -97,7 +100,7 @@ export function MarketIndices({ asOf }: { asOf?: string }) {
                         {idx.change_pct.toFixed(2)}%)
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
         </div>

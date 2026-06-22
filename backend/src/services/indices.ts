@@ -1,12 +1,20 @@
 import { yahoo } from '../lib/yahoo';
 import { IndexQuote } from '../types';
 
+/** URL slug for an index, e.g. "NIFTY 50" -> "nifty-50". */
+export function indexSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
 /**
  * The market indices shown at the top of the Stocks page. Symbols were verified
  * against Yahoo Finance (the same source the stock scan uses), so they refresh
  * automatically as part of the daily scan pipeline.
  */
-const INDICES: { name: string; symbol: string; group: 'NSE' | 'BSE' }[] = [
+export const INDICES: { name: string; symbol: string; group: 'NSE' | 'BSE' }[] = [
   // NSE
   { name: 'NIFTY 50', symbol: '^NSEI', group: 'NSE' },
   { name: 'NIFTY NEXT 50', symbol: '^NSMIDCP', group: 'NSE' },
@@ -51,13 +59,21 @@ export async function fetchIndices(): Promise<IndexQuote[]> {
         console.warn(`[indices] no quote for ${idx.name} (${idx.symbol})`);
         continue;
       }
+      const num = (v: any) => (v == null ? undefined : Number(Number(v).toFixed(2)));
       out.push({
         name: idx.name,
+        slug: indexSlug(idx.name),
         symbol: idx.symbol,
         group: idx.group,
         value: Number(Number(q.regularMarketPrice).toFixed(2)),
         change: Number(Number(q.regularMarketChange ?? 0).toFixed(2)),
         change_pct: Number(Number(q.regularMarketChangePercent ?? 0).toFixed(2)),
+        open: num(q.regularMarketOpen),
+        high: num(q.regularMarketDayHigh),
+        low: num(q.regularMarketDayLow),
+        prev_close: num(q.regularMarketPreviousClose),
+        week52_high: num(q.fiftyTwoWeekHigh),
+        week52_low: num(q.fiftyTwoWeekLow),
       });
     }
     console.log(`[indices] fetched ${out.length}/${INDICES.length} indices`);
