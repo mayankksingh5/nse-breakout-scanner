@@ -1,11 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
-/** One-time welcome splash shown on first load of the dashboard. */
+const SEEN_KEY = 'ultra-scanner-welcomed';
+
+/**
+ * One-time welcome splash, shown once per browser session. Persisting the
+ * dismissal means navigating back to the dashboard (e.g. from a detail page)
+ * does NOT re-trigger the splash — the user returns to where they were.
+ */
 export function WelcomeSplash() {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !sessionStorage.getItem(SEEN_KEY)) {
+      setShow(true);
+    }
+  }, []);
+
+  const dismiss = () => {
+    if (typeof window !== 'undefined') sessionStorage.setItem(SEEN_KEY, '1');
+    setShow(false);
+  };
+
   if (!show) return null;
 
   return (
@@ -34,7 +52,7 @@ export function WelcomeSplash() {
         </div>
 
         <button
-          onClick={() => setShow(false)}
+          onClick={dismiss}
           className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 font-bold text-slate-950 transition hover:bg-emerald-500"
         >
           Enter Dashboard <ArrowUpRight className="h-4 w-4" />

@@ -44,6 +44,26 @@ export const DEFAULT_FILTERS: IpoFilters = {
 /** Max number of IPOs that can sit in the compare tray at once. */
 export const MAX_COMPARE = 4;
 
+/** Filters for the Stocks table. Kept in the store so the page restores to the
+ *  exact same view after visiting a stock/index detail page and coming back. */
+export interface StockFilters {
+  minMarketCapCr: number;
+  scoreFilter: number;
+  volRatioFilter: number;
+  volPeriod: string;
+  minAvgVolume: number;
+  search: string;
+}
+
+export const DEFAULT_STOCK_FILTERS: StockFilters = {
+  minMarketCapCr: 5000,
+  scoreFilter: 50,
+  volRatioFilter: 0,
+  volPeriod: '1m',
+  minAvgVolume: 0,
+  search: '',
+};
+
 interface IpoState {
   theme: Theme;
   toggleTheme: () => void;
@@ -71,6 +91,10 @@ interface IpoState {
   filters: IpoFilters;
   setFilter: <K extends keyof IpoFilters>(key: K, value: IpoFilters[K]) => void;
   resetFilters: () => void;
+
+  /** Stocks-table filters (preserved across detail-page navigation). */
+  stockFilters: StockFilters;
+  setStockFilter: <K extends keyof StockFilters>(key: K, value: StockFilters[K]) => void;
 }
 
 export const useIpoStore = create<IpoState>()(
@@ -111,6 +135,10 @@ export const useIpoStore = create<IpoState>()(
       setFilter: (key, value) =>
         set((s) => ({ filters: { ...s.filters, [key]: value } })),
       resetFilters: () => set({ filters: DEFAULT_FILTERS }),
+
+      stockFilters: DEFAULT_STOCK_FILTERS,
+      setStockFilter: (key, value) =>
+        set((s) => ({ stockFilters: { ...s.stockFilters, [key]: value } })),
     }),
     {
       name: 'ipo-tracker',

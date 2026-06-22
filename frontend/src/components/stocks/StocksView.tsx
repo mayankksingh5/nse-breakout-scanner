@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search, AlertTriangle } from 'lucide-react';
 import { getFreshness } from '@/lib/freshness';
 import { MarketIndices } from '@/components/stocks/MarketIndices';
+import { useIpoStore } from '@/store/useIpoStore';
 
 interface SignalRow {
   id: string;
@@ -64,13 +65,11 @@ export function StocksView() {
   const [loading, setLoading] = useState<boolean>(true);
   const [status, setStatus] = useState<ScanStatus | null>(null);
 
-  // Filters
-  const [minMarketCapCr, setMinMarketCapCr] = useState<number>(5000);
-  const [scoreFilter, setScoreFilter] = useState<number>(50);
-  const [volRatioFilter, setVolRatioFilter] = useState<number>(0);
-  const [volPeriod, setVolPeriod] = useState<string>('1m');
-  const [minAvgVolume, setMinAvgVolume] = useState<number>(0);
-  const [search, setSearch] = useState<string>('');
+  // Filters live in the store so the view restores exactly after visiting a
+  // detail page and coming back.
+  const { minMarketCapCr, scoreFilter, volRatioFilter, volPeriod, minAvgVolume, search } =
+    useIpoStore((s) => s.stockFilters);
+  const setStockFilter = useIpoStore((s) => s.setStockFilter);
 
   const fetchSignals = useCallback(async () => {
     setLoading(true);
@@ -167,7 +166,7 @@ export function StocksView() {
           <label className={LABEL_CLS}>Min Market Cap</label>
           <select
             value={minMarketCapCr}
-            onChange={(e) => setMinMarketCapCr(Number(e.target.value))}
+            onChange={(e) => setStockFilter('minMarketCapCr', Number(e.target.value))}
             className={SELECT_CLS}
           >
             <option value={5000}>₹5,000 Cr+ (all eligible)</option>
@@ -181,7 +180,7 @@ export function StocksView() {
           <label className={LABEL_CLS}>Min Breakout Score</label>
           <select
             value={scoreFilter}
-            onChange={(e) => setScoreFilter(Number(e.target.value))}
+            onChange={(e) => setStockFilter('scoreFilter', Number(e.target.value))}
             className={SELECT_CLS}
           >
             <option value={85}>★ Strong Breakouts (&gt;=85)</option>
@@ -194,7 +193,7 @@ export function StocksView() {
           <label className={LABEL_CLS}>Volume Surge (today vs 1M)</label>
           <select
             value={volRatioFilter}
-            onChange={(e) => setVolRatioFilter(Number(e.target.value))}
+            onChange={(e) => setStockFilter('volRatioFilter', Number(e.target.value))}
             className={SELECT_CLS}
           >
             <option value={0}>Any volume</option>
@@ -209,7 +208,7 @@ export function StocksView() {
           <div className="flex gap-2">
             <select
               value={volPeriod}
-              onChange={(e) => setVolPeriod(e.target.value)}
+              onChange={(e) => setStockFilter('volPeriod', e.target.value)}
               className={SELECT_CLS + ' w-auto'}
             >
               <option value="1m">1M</option>
@@ -218,7 +217,7 @@ export function StocksView() {
             </select>
             <select
               value={minAvgVolume}
-              onChange={(e) => setMinAvgVolume(Number(e.target.value))}
+              onChange={(e) => setStockFilter('minAvgVolume', Number(e.target.value))}
               className={SELECT_CLS}
             >
               <option value={0}>Any liquidity</option>
@@ -244,7 +243,7 @@ export function StocksView() {
         <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
         <input
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => setStockFilter('search', e.target.value)}
           placeholder="Search symbol or company…"
           className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 focus:border-emerald-500 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
         />

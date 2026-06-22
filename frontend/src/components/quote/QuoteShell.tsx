@@ -1,6 +1,5 @@
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
 import { ThemeSync, ThemeToggle } from '@/components/ui/ThemeToggle';
+import { BackButton } from '@/components/ui/BackButton';
 
 /** Standalone layout for the /stocks/* and /indices/* detail routes. */
 export function QuoteShell({ children }: { children: React.ReactNode }) {
@@ -9,12 +8,7 @@ export function QuoteShell({ children }: { children: React.ReactNode }) {
       <ThemeSync />
 
       <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80 print:hidden">
-        <Link
-          href="/"
-          className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-        >
-          <ArrowLeft className="h-4 w-4" /> Dashboard
-        </Link>
+        <BackButton />
         <div className="ml-auto">
           <ThemeToggle />
         </div>
