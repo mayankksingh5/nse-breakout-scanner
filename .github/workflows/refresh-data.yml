@@ -3,12 +3,22 @@ name: Refresh market data
 # Fully automatic daily refresh of the stock dataset.
 #
 # Runs on GitHub's runners (not Vercel/Render), scans the market with the
-# existing backend tool, commits the regenerated dataset, and (if a Vercel
-# token is configured) publishes a fresh production deploy + re-points the
-# public alias. No PC, no paid API, no manual steps.
+# existing backend tool, commits the regenerated dataset, publishes a fresh
+# production deploy + re-points the public alias, and then VERIFIES the live
+# site actually serves the new data. No PC, no paid API, no manual steps.
+#
+# Reliability features (added after a silent deploy failure on 23-Jun-2026):
+#   - Deploy + alias retries up to 3x to ride out transient Vercel hiccups.
+#   - A post-deploy step polls the live site and FAILS if it stays stale, so a
+#     "green commit, stale site" situation can never pass unnoticed.
+#   - Every run writes a Scan / Commit / Deploy / Verify status table to the
+#     run summary.
+#   - Any failure opens (or comments on) a GitHub issue labelled
+#     `refresh-alert`, and GitHub emails the repo owner for scheduled-run
+#     failures — the site can no longer go stale silently.
 #
 # NOTE: this only works if Yahoo Finance answers GitHub's runner IPs. If the
-# scan returns 0 signals the publish step fails on purpose and nothing is
+# scan returns 0 signals the scan step fails on purpose and nothing is
 # committed, so a bad day never clobbers good data.
 
 on:
@@ -18,7 +28,8 @@ on:
   workflow_dispatch: {} # allow manual "Run workflow" from the Actions tab
 
 permissions:
-  contents: write # needed to commit the refreshed dataset back to the repo
+  contents: write # commit the refreshed dataset back to the repo
+  issues: write # open/update the failure-alert issue
 
 concurrency:
   group: refresh-data
@@ -35,6 +46,8 @@ jobs:
       # These are non-secret project identifiers (safe to inline).
       VERCEL_ORG_ID: team_bjupo26NVZnemC0sjOGfd007
       VERCEL_PROJECT_ID: prj_delg5bDrNWuljjnvlG5d2ua7VqbP
+      # The public alias the live site is reached through.
+      LIVE_HOST: stockfinder-nse.vercel.app
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,27 +64,167 @@ jobs:
         run: npm ci
 
       - name: Scan market and regenerate dataset
+        id: scan
         working-directory: backend
         # Writes ../frontend/src/data/signals.json. Exits non-zero (failing the
         # job) if the scan produced 0 signals — e.g. Yahoo blocked the runner.
         run: npm run refresh
 
       - name: Commit refreshed dataset
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add frontend/src/data/signals.json
           if git diff --cached --quiet; then
             echo "Dataset unchanged — nothing to commit."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "chore: refresh market data [skip ci]"
             git push
+            echo "committed=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Publish to Vercel (production)
+        id: deploy
         if: ${{ env.VERCEL_TOKEN != '' }}
         working-directory: frontend
+        # Retries the deploy + alias up to 3x. `vercel deploy` exits non-zero on
+        # an invalid token or a failed build, and `vercel alias set` on an alias
+        # failure, so any real error is caught rather than silently ignored.
         run: |
-          url=$(npx --yes vercel deploy --prod --yes --token "$VERCEL_TOKEN" | tail -n1)
-          echo "Deployed: $url"
-          npx --yes vercel alias set "$url" stockfinder-nse.vercel.app --token "$VERCEL_TOKEN"
+          set -uo pipefail
+          max=3
+          attempt=1
+          while [ "$attempt" -le "$max" ]; do
+            echo "::group::Deploy attempt $attempt/$max"
+            if url=$(npx --yes vercel deploy --prod --yes --token "$VERCEL_TOKEN" | tail -n1) \
+               && [ -n "$url" ] \
+               && npx --yes vercel alias set "$url" "$LIVE_HOST" --token "$VERCEL_TOKEN"; then
+              echo "Deployed and aliased: $url"
+              echo "url=$url" >> "$GITHUB_OUTPUT"
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "Attempt $attempt failed."
+            echo "::endgroup::"
+            attempt=$((attempt + 1))
+            [ "$attempt" -le "$max" ] && sleep 15
+          done
+          echo "All $max deploy attempts failed."
+          exit 1
+
+      - name: Verify live site serves the new dataset
+        id: verify
+        if: ${{ env.VERCEL_TOKEN != '' }}
+        # True end-to-end check: poll the public alias and confirm its
+        # lastScanAt matches the dataset we just committed. Fails (and triggers
+        # the alert) if the live site stays stale despite a "successful" deploy.
+        run: |
+          set -uo pipefail
+          expected=$(node -e "process.stdout.write(require('./frontend/src/data/signals.json').lastScanAt)")
+          echo "Expected lastScanAt: $expected"
+          for i in 1 2 3 4 5 6; do
+            live=$(curl -s --max-time 20 "https://$LIVE_HOST/api/status" \
+              | node -e "let s='';process.stdin.on('data',d=>s+=d);process.stdin.on('end',()=>{try{process.stdout.write(String(JSON.parse(s).lastScanAt||''))}catch(e){process.stdout.write('')}})")
+            echo "Attempt $i — live lastScanAt: ${live:-<none>}"
+            if [ "$live" = "$expected" ]; then
+              echo "Live site matches the committed dataset. ✅"
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "Live site did not reflect the new dataset within the timeout."
+          exit 1
+
+      - name: Write run summary
+        if: ${{ always() }}
+        env:
+          SCAN: ${{ steps.scan.outcome }}
+          COMMIT: ${{ steps.commit.outcome }}
+          COMMITTED: ${{ steps.commit.outputs.committed }}
+          DEPLOY: ${{ steps.deploy.outcome }}
+          VERIFY: ${{ steps.verify.outcome }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          icon() {
+            case "$1" in
+              success) echo "✅ success" ;;
+              failure) echo "❌ failure" ;;
+              skipped) echo "⏭️ skipped" ;;
+              "") echo "➖ not run" ;;
+              *) echo "❔ $1" ;;
+            esac
+          }
+          {
+            echo "## Market data refresh"
+            echo ""
+            echo "| Stage | Result |"
+            echo "| --- | --- |"
+            echo "| Scan market | $(icon "$SCAN") |"
+            echo "| Commit dataset | $(icon "$COMMIT") (changed=${COMMITTED:-n/a}) |"
+            echo "| Vercel deploy + alias | $(icon "$DEPLOY") |"
+            echo "| Live-site verify | $(icon "$VERIFY") |"
+            echo ""
+            echo "**Live site:** https://${LIVE_HOST}"
+            echo "**Deployment URL:** ${DEPLOY_URL:-n/a}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Alert on failure
+        if: ${{ failure() }}
+        uses: actions/github-script@v7
+        env:
+          SCAN: ${{ steps.scan.outcome }}
+          COMMIT: ${{ steps.commit.outcome }}
+          DEPLOY: ${{ steps.deploy.outcome }}
+          VERIFY: ${{ steps.verify.outcome }}
+        with:
+          script: |
+            const { SCAN, COMMIT, DEPLOY, VERIFY } = process.env;
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              `**The market-data refresh workflow failed.** The live site may now be stale.`,
+              ``,
+              `**Run:** ${runUrl}`,
+              ``,
+              `| Stage | Result |`,
+              `| --- | --- |`,
+              `| Scan | ${SCAN || 'not run'} |`,
+              `| Commit | ${COMMIT || 'not run'} |`,
+              `| Deploy + alias | ${DEPLOY || 'not run'} |`,
+              `| Live verify | ${VERIFY || 'not run'} |`,
+              ``,
+              `If Deploy/Verify failed, the dataset is on \`main\` but production is stale. Manual fix:`,
+              '```bash',
+              `git pull --ff-only`,
+              `cd frontend`,
+              `npx vercel deploy --prod --yes --token "$VERCEL_TOKEN"`,
+              `npx vercel alias set <new-url> stockfinder-nse.vercel.app --token "$VERCEL_TOKEN"`,
+              '```',
+              ``,
+              `Most common root cause: an expired/revoked \`VERCEL_TOKEN\` secret — rotate it in Settings → Secrets and variables → Actions.`,
+            ].join('\n');
+            const title = '🚨 Market data refresh failed';
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'refresh-alert',
+              per_page: 1,
+            });
+            if (existing.data.length) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['refresh-alert'],
+              });
+            }
