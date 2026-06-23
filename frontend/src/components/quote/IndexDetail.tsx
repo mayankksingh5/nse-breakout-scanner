@@ -1,15 +1,14 @@
-import { TrendingUp, TrendingDown } from 'lucide-react';
 import type { IndexQuote } from '@/types/market';
 import { Card } from '@/components/ui/Card';
 import { StatTile } from '@/components/ui/StatTile';
 import { PriceChart } from '@/components/quote/PriceChart';
+import { LiveQuoteHeader, LiveDayChangeTile } from '@/components/quote/LiveQuote';
 
 function lvl(n?: number): string {
   return n == null ? '—' : n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 export function IndexDetail({ idx }: { idx: IndexQuote }) {
-  const up = idx.change >= 0;
   const range52 =
     idx.week52_low != null && idx.week52_high != null
       ? Math.max(0, Math.min(100, ((idx.value - idx.week52_low) / (idx.week52_high - idx.week52_low)) * 100))
@@ -28,14 +27,12 @@ export function IndexDetail({ idx }: { idx: IndexQuote }) {
           </div>
           <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Market Index</p>
         </div>
-        <div className="sm:text-right">
-          <div className="font-mono text-3xl font-bold text-slate-900 dark:text-slate-50">{lvl(idx.value)}</div>
-          <div className={`mt-0.5 flex items-center gap-1 font-mono text-sm font-semibold sm:justify-end ${up ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
-            {up ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            <span>{up ? '+' : ''}{lvl(idx.change)}</span>
-            <span>({up ? '+' : ''}{idx.change_pct.toFixed(2)}%)</span>
-          </div>
-        </div>
+        <LiveQuoteHeader
+          priceKey={idx.slug}
+          value={idx.value}
+          change={idx.change}
+          changePct={idx.change_pct}
+        />
       </div>
 
       {/* Chart */}
@@ -51,11 +48,7 @@ export function IndexDetail({ idx }: { idx: IndexQuote }) {
         <StatTile label="Prev Close" value={lvl(idx.prev_close)} />
         <StatTile label="52W High" value={lvl(idx.week52_high)} />
         <StatTile label="52W Low" value={lvl(idx.week52_low)} />
-        <StatTile
-          label="Day Change"
-          value={`${up ? '+' : ''}${idx.change_pct.toFixed(2)}%`}
-          valueClassName={up ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}
-        />
+        <LiveDayChangeTile priceKey={idx.slug} changePct={idx.change_pct} />
         {range52 != null && <StatTile label="Position in 52W Range" value={`${range52.toFixed(0)}%`} />}
       </div>
 

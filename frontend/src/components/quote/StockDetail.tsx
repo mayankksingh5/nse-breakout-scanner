@@ -1,8 +1,9 @@
-import { ArrowUpRight, ShieldAlert, TrendingUp, TrendingDown } from 'lucide-react';
+import { ArrowUpRight, ShieldAlert } from 'lucide-react';
 import type { StockSignal } from '@/types/market';
 import { Card } from '@/components/ui/Card';
 import { StatTile } from '@/components/ui/StatTile';
 import { PriceChart } from '@/components/quote/PriceChart';
+import { LiveQuoteHeader, LiveDayChangeTile } from '@/components/quote/LiveQuote';
 
 function price(n?: number): string {
   return n == null ? '—' : '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -28,7 +29,6 @@ const SIGNAL_META: Record<string, { label: string; cls: string }> = {
 };
 
 export function StockDetail({ s }: { s: StockSignal }) {
-  const up = s.price_change_pct >= 0;
   const sig = SIGNAL_META[s.signal_type] ?? SIGNAL_META.MONITOR;
   const changeAbs = s.prev_close != null ? s.current_price - s.prev_close : undefined;
 
@@ -52,14 +52,13 @@ export function StockDetail({ s }: { s: StockSignal }) {
             </p>
           )}
         </div>
-        <div className="sm:text-right">
-          <div className="font-mono text-3xl font-bold text-slate-900 dark:text-slate-50">{price(s.current_price)}</div>
-          <div className={`mt-0.5 flex items-center gap-1 font-mono text-sm font-semibold sm:justify-end ${up ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
-            {up ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-            {changeAbs != null && <span>{up ? '+' : ''}{changeAbs.toFixed(2)}</span>}
-            <span>({up ? '+' : ''}{s.price_change_pct.toFixed(2)}%)</span>
-          </div>
-        </div>
+        <LiveQuoteHeader
+          priceKey={s.symbol}
+          currency
+          value={s.current_price}
+          change={changeAbs}
+          changePct={s.price_change_pct}
+        />
       </div>
 
       {/* Chart */}
@@ -98,7 +97,7 @@ export function StockDetail({ s }: { s: StockSignal }) {
             valueClassName={s.distance_pct <= 2 && s.distance_pct >= -0.5 ? 'text-amber-600 dark:text-amber-400' : ''}
           />
           <StatTile label="Volume Surge (vs 1M)" value={`${s.volume_ratio.toFixed(2)}x`} valueClassName={s.volume_ratio >= 2 ? 'text-cyan-600 dark:text-cyan-400' : ''} />
-          <StatTile label="Day Change" value={`${up ? '+' : ''}${s.price_change_pct.toFixed(2)}%`} valueClassName={up ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'} />
+          <LiveDayChangeTile priceKey={s.symbol} changePct={s.price_change_pct} />
         </div>
       </Card>
 
