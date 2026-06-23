@@ -12,6 +12,7 @@
  *   GET /live             - Server-Sent Events stream of price updates
  */
 import 'dotenv/config';
+import { join } from 'path';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { startHub, getSnapshot, getHealth, addListener, removeListener } from './services/live/liveHub';
@@ -23,6 +24,12 @@ const app = express();
 // when set; otherwise reflect all (handy for local dev).
 const allowed = process.env.ALLOWED_ORIGIN?.split(',').map((s) => s.trim()).filter(Boolean);
 app.use(cors(allowed && allowed.length ? { origin: allowed } : {}));
+
+// Local debug preview: a self-contained page that renders the live SSE stream.
+// Handy for verifying the hub in a browser before the Phase 2 frontend overlay.
+app.get('/preview', (_req: Request, res: Response) => {
+  res.sendFile(join(__dirname, 'public', 'preview.html'));
+});
 
 app.get('/health', (_req: Request, res: Response) => res.json({ ok: true, ...getHealth() }));
 app.get('/api/live/health', (_req: Request, res: Response) => res.json(getHealth()));

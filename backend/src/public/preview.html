@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ultra Scanner — Live Hub Preview</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0a0e14; color: #e6edf3; font: 14px/1.4 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    header { padding: 16px 20px; border-bottom: 1px solid #1b2432; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+    h1 { font-size: 16px; margin: 0; font-weight: 700; letter-spacing: .3px; }
+    .pill { padding: 3px 10px; border-radius: 999px; font-size: 12px; border: 1px solid #1b2432; background: #0e141d; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    .ok { background: #2ea043; } .bad { background: #f85149; } .warn { background: #d29922; }
+    .muted { color: #7d8590; }
+    main { padding: 16px 20px; }
+    h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: #7d8590; margin: 18px 0 8px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid #121925; font-variant-numeric: tabular-nums; }
+    th:first-child, td:first-child { text-align: left; }
+    th { color: #7d8590; font-weight: 600; font-size: 12px; }
+    .up { color: #3fb950; } .down { color: #f85149; } .flat { color: #7d8590; }
+    tr.flash td { transition: background .05s; background: #16202e; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚡ Ultra Scanner — Live Hub Preview</h1>
+    <span class="pill"><span id="connDot" class="dot warn"></span><span id="connText">connecting…</span></span>
+    <span class="pill">Market: <b id="market">—</b></span>
+    <span class="pill">Tokens: <b id="tokens">—</b></span>
+    <span class="pill">Ticks: <b id="tickCount">0</b></span>
+    <span class="pill muted">Snapshot: <span id="scan">—</span></span>
+  </header>
+  <main>
+    <p class="muted" id="note"></p>
+    <div class="grid">
+      <section>
+        <h2>Indices</h2>
+        <table><thead><tr><th>Index</th><th>LTP</th><th>Chg</th><th>%</th></tr></thead><tbody id="indices"></tbody></table>
+      </section>
+      <section>
+        <h2>Stocks <span class="muted" id="stockCount"></span></h2>
+        <table><thead><tr><th>Symbol</th><th>LTP</th><th>Chg</th><th>%</th></tr></thead><tbody id="stocks"></tbody></table>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const rows = new Map(); // key -> <tr>
+    let ticks = 0;
+    const fmt = (n) => n == null ? '—' : Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const cls = (n) => n == null ? 'flat' : n > 0 ? 'up' : n < 0 ? 'down' : 'flat';
+    const sign = (n) => n == null ? '' : n > 0 ? '+' : '';
+
+    function upsert(p) {
+      const tbody = document.getElementById(p.kind === 'index' ? 'indices' : 'stocks');
+      let tr = rows.get(p.key);
+      if (!tr) {
+        tr = document.createElement('tr');
+        tr.innerHTML = '<td></td><td></td><td></td><td></td>';
+        rows.set(p.key, tr);
+        tbody.appendChild(tr);
+      }
+      const td = tr.children;
+      td[0].textContent = p.key;
+      td[1].textContent = '₹' + fmt(p.ltp);
+      td[2].textContent = sign(p.change) + fmt(p.change);
+      td[3].textContent = sign(p.changePct) + fmt(p.changePct) + '%';
+      td[2].className = cls(p.change);
+      td[3].className = cls(p.changePct);
+      tr.classList.add('flash');
+      setTimeout(() => tr.classList.remove('flash'), 120);
+    }
+
+    function sortTables() {
+      for (const id of ['indices', 'stocks']) {
+        const tb = document.getElementById(id);
+        [...tb.children].sort((a, b) => a.children[0].textContent.localeCompare(b.children[0].textContent)).forEach((r) => tb.appendChild(r));
+      }
+      document.getElementById('stockCount').textContent = '(' + document.getElementById('stocks').children.length + ')';
+    }
+
+    async function pollHealth() {
+      try {
+        const h = await (await fetch('/api/live/health')).json();
+        document.getElementById('market').textContent = h.marketOpen ? 'OPEN' : 'closed';
+        document.getElementById('tokens').textContent = h.tokenCount;
+        document.getElementById('scan').textContent = h.lastScanAt ? new Date(h.lastScanAt).toLocaleString('en-IN') : '—';
+        const dot = document.getElementById('connDot'), txt = document.getElementById('connText');
+        if (h.connected) { dot.className = 'dot ok'; txt.textContent = 'connected'; }
+        else { dot.className = 'dot bad'; txt.textContent = 'disconnected'; }
+        document.getElementById('note').textContent = h.marketOpen
+          ? 'Market is open — prices update live as ticks arrive.'
+          : 'Market is closed — showing the last traded price. Values update live during 09:15–15:30 IST on trading days.';
+      } catch (e) { /* ignore */ }
+    }
+
+    const es = new EventSource('/live');
+    es.addEventListener('snapshot', (ev) => {
+      JSON.parse(ev.data).forEach(upsert);
+      sortTables();
+    });
+    es.onmessage = (ev) => {
+      upsert(JSON.parse(ev.data));
+      document.getElementById('tickCount').textContent = ++ticks;
+    };
+    es.onerror = () => {
+      const dot = document.getElementById('connDot'), txt = document.getElementById('connText');
+      dot.className = 'dot bad'; txt.textContent = 'stream error — retrying…';
+    };
+
+    pollHealth();
+    setInterval(pollHealth, 5000);
+  </script>
+</body>
+</html>
