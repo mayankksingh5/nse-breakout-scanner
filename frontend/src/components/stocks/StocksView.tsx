@@ -6,6 +6,7 @@ import { ArrowUpRight, ShieldAlert, RefreshCw, Layers, Search, AlertTriangle } f
 import { getFreshness } from '@/lib/freshness';
 import { MarketIndices } from '@/components/stocks/MarketIndices';
 import { useIpoStore } from '@/store/useIpoStore';
+import { useLivePrices } from '@/lib/useLivePrices';
 
 interface SignalRow {
   id: string;
@@ -64,6 +65,7 @@ export function StocksView() {
   const [data, setData] = useState<SignalRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [status, setStatus] = useState<ScanStatus | null>(null);
+  const { enabled, connected, prices } = useLivePrices();
 
   // Filters live in the store so the view restores exactly after visiting a
   // detail page and coming back.
@@ -284,7 +286,14 @@ export function StocksView() {
                   </td>
                 </tr>
               ) : (
-                data.map((row) => (
+                data.map((row) => {
+                  // Overlay live price/change when the hub has a tick for this
+                  // symbol; otherwise show the snapshot values.
+                  const live = prices[row.symbol];
+                  const price = live?.ltp ?? row.current_price;
+                  const changePct = live?.changePct ?? row.price_change_pct;
+                  const isLive = enabled && connected && !!live && live.ts > 0;
+                  return (
                   <tr
                     key={row.id}
                     onClick={() => router.push(`/stocks/${row.symbol}`)}
@@ -294,10 +303,15 @@ export function StocksView() {
                       <div>{row.symbol}</div>
                       <div className="max-w-[160px] truncate text-[11px] font-normal text-slate-500">{row.company_name}</div>
                     </td>
-                    <td className="px-4 py-3 font-mono font-medium">₹{Number(row.current_price).toFixed(2)}</td>
+                    <td className="px-4 py-3 font-mono font-medium">
+                      <span className="inline-flex items-center gap-1.5">
+                        ₹{Number(price).toFixed(2)}
+                        {isLive && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" title="Live" />}
+                      </span>
+                    </td>
                     <td className="px-4 py-3 font-mono">
-                      <span className={row.price_change_pct >= 0 ? 'font-medium text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
-                        {row.price_change_pct >= 0 ? '+' : ''}{Number(row.price_change_pct).toFixed(2)}%
+                      <span className={changePct >= 0 ? 'font-medium text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
+                        {changePct >= 0 ? '+' : ''}{Number(changePct).toFixed(2)}%
                       </span>
                     </td>
                     <td className="px-4 py-3 font-mono text-slate-600 dark:text-slate-300">{fmtCap(row.market_cap_cr)}</td>
@@ -332,7 +346,8 @@ export function StocksView() {
                       </span>
                     </td>
                   </tr>
-                ))
+                  );
+                })
               )}
             </tbody>
           </table>

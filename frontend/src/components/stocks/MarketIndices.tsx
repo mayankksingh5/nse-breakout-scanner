@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { useLivePrices } from '@/lib/useLivePrices';
 
 interface IndexRow {
   name: string;
@@ -26,6 +27,7 @@ function fmt(n: number): string {
 export function MarketIndices({ asOf }: { asOf?: string }) {
   const [rows, setRows] = useState<IndexRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const { enabled, connected, prices } = useLivePrices();
 
   useEffect(() => {
     let alive = true;
@@ -51,8 +53,13 @@ export function MarketIndices({ asOf }: { asOf?: string }) {
   return (
     <section className="border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-900">
       <div className="mb-3 flex items-baseline justify-between gap-3">
-        <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-200">
+        <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-slate-200">
           Market Indices
+          {enabled && connected && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> LIVE
+            </span>
+          )}
         </h2>
         {asOf && <span className="text-[11px] text-slate-400 dark:text-slate-500">as of {asOf}</span>}
       </div>
@@ -68,7 +75,13 @@ export function MarketIndices({ asOf }: { asOf?: string }) {
                 />
               ))
             : rows.map((idx) => {
-                const up = idx.change >= 0;
+                // Overlay live values when present; else fall back to snapshot.
+                const live = prices[idx.slug];
+                const value = live?.ltp ?? idx.value;
+                const change = live?.change ?? idx.change;
+                const changePct = live?.changePct ?? idx.change_pct;
+                const isLive = enabled && connected && !!live && live.ts > 0;
+                const up = change >= 0;
                 const colour = up
                   ? 'text-emerald-600 dark:text-emerald-400'
                   : 'text-rose-600 dark:text-rose-400';
@@ -86,18 +99,19 @@ export function MarketIndices({ asOf }: { asOf?: string }) {
                         {idx.group}
                       </span>
                     </div>
-                    <div className="mt-1.5 font-mono text-base font-bold text-slate-900 dark:text-slate-50">
-                      {fmt(idx.value)}
+                    <div className="mt-1.5 flex items-center gap-1.5 font-mono text-base font-bold text-slate-900 dark:text-slate-50">
+                      {fmt(value)}
+                      {isLive && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" title="Live" />}
                     </div>
                     <div className={`mt-0.5 flex items-center gap-1 font-mono text-xs font-medium ${colour}`}>
                       {up ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                       <span>
                         {up ? '+' : ''}
-                        {fmt(idx.change)}
+                        {fmt(change)}
                       </span>
                       <span>
                         ({up ? '+' : ''}
-                        {idx.change_pct.toFixed(2)}%)
+                        {changePct.toFixed(2)}%)
                       </span>
                     </div>
                   </Link>
