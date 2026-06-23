@@ -42,6 +42,20 @@ export interface IndexQuote {
   week52_low?: number;
 }
 
+// One symbol's latest live price, as broadcast by the live hub (Phase 1).
+// `key` is the signal symbol (e.g. "RELIANCE") or index slug (e.g. "nifty-50"),
+// matching the keys the frontend already uses, so the UI can overlay live
+// prices onto the static snapshot without any extra lookup.
+export interface LivePrice {
+  key: string;
+  kind: 'stock' | 'index';
+  ltp: number;                 // last traded price, rupees
+  prevClose: number | null;    // from the daily snapshot, for change math
+  change: number | null;       // ltp - prevClose
+  changePct: number | null;    // percentage vs prevClose
+  ts: number;                  // epoch ms when this tick was received
+}
+
 // A single point on a price history series: [epochSeconds, close].
 export type HistoryPoint = [number, number];
 
