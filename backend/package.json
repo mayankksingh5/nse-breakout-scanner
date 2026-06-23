@@ -6,6 +6,7 @@
     "dev": "tsx watch src/app.ts",
     "start": "tsx src/app.ts",
     "refresh": "tsx src/publish.ts",
+    "smartapi:check": "tsx scripts/smartapi-check.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -22,8 +23,10 @@
     "express": "^5.2.1",
     "ioredis": "^5.11.1",
     "node-cron": "^3.0.3",
+    "otplib": "^12.0.1",
     "p-limit": "^7.3.0",
     "pg": "^8.21.0",
+    "smartapi-javascript": "^1.0.27",
     "tsx": "^4.22.4",
     "yahoo-finance2": "^3.15.3"
   },
