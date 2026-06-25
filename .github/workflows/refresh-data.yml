@@ -51,6 +51,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history so the commit step can re-base onto a moved remote and
+          # push without shallow-clone edge cases.
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -72,18 +76,35 @@ jobs:
 
       - name: Commit refreshed dataset
         id: commit
+        # Push with retry-on-latest: each attempt re-points the branch at the
+        # newest remote tip (keeping the freshly generated file staged) and
+        # builds one clean commit on top, so a remote that moves between
+        # checkout and push can't cause a non-fast-forward rejection. No rebase,
+        # so signals.json can never hit a merge conflict.
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add frontend/src/data/signals.json
-          if git diff --cached --quiet; then
-            echo "Dataset unchanged — nothing to commit."
-            echo "committed=false" >> "$GITHUB_OUTPUT"
-          else
-            git commit -m "chore: refresh market data [skip ci]"
-            git push
-            echo "committed=true" >> "$GITHUB_OUTPUT"
-          fi
+          msg="chore: refresh market data [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --soft origin/main
+            git add frontend/src/data/signals.json
+            if git diff --cached --quiet; then
+              echo "Dataset unchanged — nothing to commit."
+              echo "committed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            git commit -m "$msg"
+            if git push origin HEAD:main; then
+              echo "Pushed on attempt $attempt."
+              echo "committed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Push rejected (remote moved); rebuilding on latest main (attempt $attempt)…"
+            sleep 3
+          done
+          echo "Failed to push after retries."
+          exit 1
 
       - name: Publish to Vercel (production)
         id: deploy
