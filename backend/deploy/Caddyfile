@@ -1,0 +1,20 @@
+# Ultra Scanner live hub — reverse proxy with automatic HTTPS (Let's Encrypt).
+# Replace live.example.com with your subdomain; point an A record at this host.
+#
+#   sudo cp deploy/Caddyfile /etc/caddy/Caddyfile   # edit the domain first
+#   sudo systemctl reload caddy
+#
+# Caddy obtains + renews the TLS cert automatically once DNS resolves here.
+
+live.example.com {
+	encode zstd gzip
+
+	# SSE needs streaming (no response buffering) and long-lived connections.
+	reverse_proxy localhost:8080 {
+		flush_interval -1
+		transport http {
+			# Don't time out the persistent /live stream.
+			read_timeout 0
+		}
+	}
+}
