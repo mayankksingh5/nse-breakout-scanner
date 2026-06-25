@@ -15,8 +15,19 @@ import 'dotenv/config';
 import { join } from 'path';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { startHub, getSnapshot, getHealth, addListener, removeListener } from './services/live/liveHub';
+import { startHub, getSnapshot, getHealth, addListener, removeListener, recover } from './services/live/liveHub';
 import { LivePrice } from './types';
+
+// Last-resort guards: the SmartAPI SDK can throw synchronously inside socket
+// callbacks (e.g. on a 401), which would otherwise crash the daemon. Log and
+// recover instead of exiting.
+process.on('uncaughtException', (err: any) => {
+  console.error('[live] uncaughtException — recovering:', err?.message || err);
+  recover('uncaughtException');
+});
+process.on('unhandledRejection', (reason: any) => {
+  console.error('[live] unhandledRejection:', (reason && reason.message) || reason);
+});
 
 const app = express();
 

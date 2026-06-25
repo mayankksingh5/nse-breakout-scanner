@@ -117,11 +117,46 @@ function onTick(data: any): void {
   }
 }
 
+let recovering = false;
+let recoverDelay = 2000;
+
+/**
+ * Debounced recovery: get a FRESH session + socket. The feed token expires
+ * daily and Angel drops the socket overnight; the SDK can't self-heal that (it
+ * retries with the stale token). We coalesce triggers and back off on repeated
+ * failures, so a bad patch can't busy-loop.
+ */
+function scheduleRecover(reason: string): void {
+  if (recovering) return;
+  recovering = true;
+  state.connected = false;
+  console.warn(`[live] recovering in ${recoverDelay}ms (${reason})`);
+  setTimeout(async () => {
+    try {
+      await relogin();
+      recoverDelay = 2000; // reset backoff on success
+      recovering = false;
+    } catch (e: any) {
+      console.error('[live] recover failed:', e?.message || e);
+      recoverDelay = Math.min(recoverDelay * 2, 60_000);
+      recovering = false;
+      scheduleRecover('retry'); // keep trying with backoff
+    }
+  }, recoverDelay);
+}
+
+/** External recovery trigger (e.g. from the process-level error guard). */
+export function recover(reason = 'external'): void {
+  scheduleRecover(reason);
+}
+
 /** Establish (or re-establish) the upstream socket using the current session. */
 function connect(): void {
   ws = createFeedSocket(session!);
-  // Enable SDK auto-reconnect (exponential) — it re-subscribes from its buffer.
-  ws.reconnection?.('exponential', 2000, 2);
+  // Make the SDK REJECT (not throw) on socket errors like a 401 after token
+  // expiry — without this it throws synchronously and crashes the process.
+  ws.customError?.();
+  ws.on('tick', onTick);
   ws.connect()
     .then(() => {
       state.connected = true;
@@ -129,11 +164,9 @@ function connect(): void {
       subscribeAll();
     })
     .catch((e: any) => {
-      state.connected = false;
-      console.error('[live] connect failed:', e?.message || e);
+      console.error('[live] connect error:', e?.message || e);
+      scheduleRecover('connect-error');
     });
-  ws.on('tick', onTick);
-  ws.on('error', (e: any) => console.error('[live] ws error:', e?.message || e));
 }
 
 /** Full re-login: tear down the socket, get fresh tokens, reload + resubscribe. */
@@ -157,8 +190,15 @@ export async function startHub(): Promise<void> {
   connect();
 
   // Daily re-login at 08:30 IST on weekdays (before the 09:15 open).
-  cron.schedule('30 8 * * 1-5', () => { relogin().catch((e) => console.error('[live] relogin failed:', e?.message || e)); },
-    { timezone: 'Asia/Kolkata' });
+  cron.schedule('30 8 * * 1-5', () => scheduleRecover('daily-relogin'), { timezone: 'Asia/Kolkata' });
+
+  // Watchdog: during market hours a silent feed (no ticks for >2min) means the
+  // socket died — recover with a fresh token.
+  setInterval(() => {
+    if (!state.started || recovering || !isMarketOpen()) return;
+    const since = state.lastTickAt ? Date.now() - state.lastTickAt : Infinity;
+    if (since > 120_000) scheduleRecover('stale-feed');
+  }, 60_000);
 
   console.log('[live] hub started');
 }
