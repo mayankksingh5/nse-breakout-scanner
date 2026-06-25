@@ -31,10 +31,13 @@ module.exports = {
     },
     {
       name: 'ultra-ngrok',
-      // ngrok is a standalone exe → run directly. It reads the authtoken from
-      // %LOCALAPPDATA%\ngrok\ngrok.yml in YOUR user profile.
-      script: 'C:/Users/mayan/ngrok/ngrok.exe',
-      args: 'http --url=https://padded-deviation-perjury.ngrok-free.dev 8080',
+      // Absolute path to the REAL ngrok (not the WindowsApps execution-alias
+      // stub that `ngrok` on PATH resolves to).
+      script: 'C:\\Users\\mayan\\ngrok\\ngrok.exe',
+      // Explicit --config so ngrok always finds the authtoken, regardless of how
+      // PM2 / a boot session resolves %LOCALAPPDATA%. (Uses the config file, so
+      // the token stays out of git — do NOT inline the authtoken here.)
+      args: 'http --config C:\\Users\\mayan\\AppData\\Local\\ngrok\\ngrok.yml --url=https://padded-deviation-perjury.ngrok-free.dev 8080',
       interpreter: 'none',
       autorestart: true,
       max_restarts: 50,
