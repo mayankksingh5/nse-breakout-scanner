@@ -47,14 +47,26 @@ const state: HubState = {
   unresolved: [],
 };
 
-/** NSE/BSE cash market hours: 09:15–15:30 IST, Mon–Fri. */
+/**
+ * Whether the NSE/BSE feed is active: the 09:00 pre-open auction through the
+ * 15:30 close, Mon–Fri IST. Includes pre-open so the stale-feed watchdog covers
+ * the 09:00–09:15 window. Uses Intl parts so it's correct on a UTC host (the
+ * old `new Date(toLocaleString())` round-trip is locale-fragile).
+ */
 export function isMarketOpen(now = new Date()): boolean {
-  // Convert to IST regardless of host timezone.
-  const ist = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-  const day = ist.getDay(); // 0 Sun .. 6 Sat
-  if (day === 0 || day === 6) return false;
-  const mins = ist.getHours() * 60 + ist.getMinutes();
-  return mins >= 9 * 60 + 15 && mins <= 15 * 60 + 30;
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Kolkata',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+    .formatToParts(now)
+    .reduce((a, p) => ((a[p.type] = p.value), a), {} as Record<string, string>);
+
+  if (parts.weekday === 'Sat' || parts.weekday === 'Sun') return false;
+  const mins = Number(parts.hour) * 60 + Number(parts.minute);
+  return mins >= 9 * 60 && mins <= 15 * 60 + 30;
 }
 
 /** Resolve which tokens to stream from the current snapshot. */
