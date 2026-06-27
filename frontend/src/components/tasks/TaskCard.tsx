@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarClock, MessageSquare } from 'lucide-react';
+import { CalendarClock } from 'lucide-react';
 import type { Task } from '@/types/task';
 import { useTaskStore } from '@/store/useTaskStore';
 import { PriorityBadge } from '@/components/tasks/badges';
