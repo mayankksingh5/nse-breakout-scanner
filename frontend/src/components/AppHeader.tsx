@@ -1,6 +1,7 @@
 'use client';
 
-import { LineChart, Rocket } from 'lucide-react';
+import Link from 'next/link';
+import { LineChart, Rocket, KanbanSquare } from 'lucide-react';
 import type { AppTab } from '@/store/useIpoStore';
 import { useIpoStore } from '@/store/useIpoStore';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -54,7 +55,14 @@ export function AppHeader() {
           })}
         </nav>
 
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
+          <Link
+            href="/tasks"
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-200"
+          >
+            <KanbanSquare className="h-4 w-4" />
+            <span className="hidden sm:inline">Team</span>
+          </Link>
           <ThemeToggle />
         </div>
       </div>
