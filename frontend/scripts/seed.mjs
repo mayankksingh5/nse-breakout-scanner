@@ -77,6 +77,7 @@ async function main() {
       role: 'admin',
       designation: 'Administrator',
       active: true,
+      order: 0,
       createdAt: now,
       updatedAt: now,
     });
@@ -88,7 +89,7 @@ async function main() {
 
   // 2. Sample members (password = "password123")
   const memberIds = [];
-  for (const m of SAMPLE_MEMBERS) {
+  for (const [i, m] of SAMPLE_MEMBERS.entries()) {
     const existing = await users.findOne({ email: m.email });
     if (existing) {
       memberIds.push(existing._id);
@@ -101,6 +102,7 @@ async function main() {
       passwordHash,
       role: 'member',
       active: true,
+      order: i + 1,
       createdAt: now,
       updatedAt: now,
     });

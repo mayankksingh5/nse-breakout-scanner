@@ -42,6 +42,10 @@ export interface User {
   role: Role;
   designation: string;
   active: boolean;
+  /** Manual display order on the Members page (lower = first). */
+  order: number;
+  /** Number of tasks currently assigned to this member (set by GET /api/users). */
+  assignedCount?: number;
   createdAt: string;
   updatedAt: string;
 }

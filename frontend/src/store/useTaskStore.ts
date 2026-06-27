@@ -6,6 +6,12 @@ import * as api from '@/lib/tasksApi';
 // loaded task list, and the active filters. Theme is intentionally NOT here — it
 // is shared with the rest of the app via useIpoStore so dark mode stays unified.
 
+export interface Toast {
+  id: number;
+  type: 'success' | 'error';
+  message: string;
+}
+
 export interface TaskFilters {
   status: Status | '';
   priority: Priority | '';
@@ -13,6 +19,9 @@ export interface TaskFilters {
   search: string;
   sort: string; // updated | created | due | priority | status
 }
+
+// Monotonic id source for toasts (module-scoped, avoids Date.now collisions).
+let toastSeq = 1;
 
 export const DEFAULT_TASK_FILTERS: TaskFilters = {
   status: '',
@@ -45,6 +54,11 @@ interface TaskStoreState {
   /** Bumped after any mutation so views know to refetch. */
   refreshSignal: number;
   bumpRefresh: () => void;
+
+  // Toast notifications.
+  toasts: Toast[];
+  pushToast: (type: Toast['type'], message: string) => void;
+  dismissToast: (id: number) => void;
 
   /** Load current user + members once on entry. Returns the user (or null). */
   bootstrap: () => Promise<User | null>;
@@ -79,6 +93,11 @@ export const useTaskStore = create<TaskStoreState>((set, get) => ({
   closeDrawers: () => set({ formOpen: false, editingTask: null, detailTaskId: null }),
   refreshSignal: 0,
   bumpRefresh: () => set((s) => ({ refreshSignal: s.refreshSignal + 1 })),
+
+  toasts: [],
+  pushToast: (type, message) =>
+    set((s) => ({ toasts: [...s.toasts, { id: toastSeq++, type, message }] })),
+  dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
 
   bootstrap: async () => {
     try {

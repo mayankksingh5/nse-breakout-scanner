@@ -18,6 +18,7 @@ export function serializeUser(doc: UserDoc): User {
     role: doc.role,
     designation: doc.designation,
     active: doc.active,
+    order: doc.order ?? 0,
     createdAt: iso(doc.createdAt)!,
     updatedAt: iso(doc.updatedAt)!,
   };

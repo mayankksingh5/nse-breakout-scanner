@@ -19,6 +19,7 @@ import { ThemeSync, ThemeToggle } from '@/components/ui/ThemeToggle';
 import { MemberBadge } from '@/components/tasks/badges';
 import { TaskFormDrawer } from '@/components/tasks/TaskFormDrawer';
 import { TaskDetailDrawer } from '@/components/tasks/TaskDetailDrawer';
+import { Toaster } from '@/components/tasks/Toaster';
 
 const NAV = [
   { href: '/tasks', label: 'Dashboard', icon: LayoutDashboard, exact: true },
@@ -160,6 +161,8 @@ export function TasksShell({ children }: { children: React.ReactNode }) {
         onEdit={openEdit}
         onChanged={bumpRefresh}
       />
+
+      <Toaster />
     </div>
   );
 }

@@ -55,10 +55,36 @@ export const createUser = (input: {
 
 export const updateUser = (
   id: string,
-  input: Partial<{ name: string; role: Role; designation: string; active: boolean; password: string }>,
+  input: Partial<{
+    name: string;
+    email: string;
+    role: Role;
+    designation: string;
+    active: boolean;
+    password: string;
+  }>,
 ) => req<User>(`/api/users/${id}`, { method: 'PATCH', body: JSON.stringify(input) });
 
-export const deactivateUser = (id: string) => req<User>(`/api/users/${id}`, { method: 'DELETE' });
+/** Activate / deactivate a member (keeps the account + history). */
+export const setUserActive = (id: string, active: boolean) =>
+  req<User>(`/api/users/${id}`, { method: 'PATCH', body: JSON.stringify({ active }) });
+
+/**
+ * Permanently delete a non-admin member. Pass `reassignTo` to move their
+ * assigned tasks to another member; omit it to leave those tasks unassigned.
+ */
+export const deleteUser = (id: string, reassignTo?: string | null) =>
+  req<{ ok: true }>(`/api/users/${id}`, {
+    method: 'DELETE',
+    body: JSON.stringify(reassignTo ? { reassignTo } : {}),
+  });
+
+/** Persist a new manual ordering of members (array of ids, top to bottom). */
+export const reorderUsers = (order: string[]) =>
+  req<{ ok: true; count: number }>('/api/users', {
+    method: 'PUT',
+    body: JSON.stringify({ order }),
+  });
 
 // --- Tasks ---
 export interface TaskQuery {

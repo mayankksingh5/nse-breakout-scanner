@@ -41,6 +41,8 @@ export interface UserDoc {
   role: 'admin' | 'member';
   designation: string;
   active: boolean;
+  /** Manual display order on the Members page (lower = first). */
+  order?: number;
   createdAt: Date;
   updatedAt: Date;
 }
