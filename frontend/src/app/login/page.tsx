@@ -9,7 +9,7 @@ import { ThemeSync } from '@/components/ui/ThemeToggle';
 function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get('next') || '/tasks';
+  const next = params.get('next') || '/workspace';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

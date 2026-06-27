@@ -1,8 +1,10 @@
-# Team Task Management (`/tasks`)
+# Team Workspace (`/workspace`)
 
 A simplified Jira/Trello-style task manager for a 5–10 person team, built into the
 existing Next.js app. The public stock/IPO dashboard is unchanged and stays
-public; the task system lives under `/tasks` and is gated behind login.
+public; the team workspace lives under `/workspace` and is gated behind login.
+Sign-in is a global modal (header "Sign in"); `/login` remains as a fallback.
+Legacy `/tasks/*` URLs permanently redirect to `/workspace/*`.
 
 ## What it does
 - **Roles:** Admin (full control + member management) and Team Member.
@@ -33,7 +35,8 @@ public; the task system lives under `/tasks` and is gated behind login.
    npm install
    npm run seed      # creates the admin + a few sample members/tasks
    ```
-4. **Run:** `npm run dev`, then open <http://localhost:3000/tasks> and sign in.
+4. **Run:** `npm run dev`, then open <http://localhost:3000> and click **Sign in**
+   (or go to `/workspace`).
 
 ## Deploying on Vercel
 Add the same env vars (`MONGODB_URI`, `JWT_SECRET`, …) in **Project → Settings →

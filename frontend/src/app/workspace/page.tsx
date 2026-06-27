@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { ListTodo, Loader2, Timer, Eye, CheckCircle2 } from 'lucide-react';
+import { ListTodo, Loader2, Timer, Eye, CheckCircle2, Plus } from 'lucide-react';
 import { useTaskStore } from '@/store/useTaskStore';
 import { fetchDashboard } from '@/lib/tasksApi';
 import { Card, CardBody, SectionTitle } from '@/components/ui/Card';
@@ -22,6 +22,8 @@ export default function DashboardPage() {
   const refreshSignal = useTaskStore((s) => s.refreshSignal);
   const openDetail = useTaskStore((s) => s.openDetail);
   const memberName = useTaskStore((s) => s.memberName);
+  const openCreate = useTaskStore((s) => s.openCreate);
+  const currentUser = useTaskStore((s) => s.currentUser);
 
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,7 +54,20 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-bold">Dashboard</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold">
+            {currentUser ? `Welcome, ${currentUser.name.split(' ')[0]}` : 'Dashboard'}
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Here&apos;s your team at a glance.</p>
+        </div>
+        <button
+          onClick={openCreate}
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600"
+        >
+          <Plus className="h-5 w-5" /> Create Task
+        </button>
+      </div>
 
       {loading ? (
         <div className="flex items-center gap-2 text-slate-500">

@@ -60,6 +60,17 @@ interface TaskStoreState {
   pushToast: (type: Toast['type'], message: string) => void;
   dismissToast: (id: number) => void;
 
+  /** Global session load (current user only). Safe to call on public pages. */
+  loadSession: () => Promise<User | null>;
+  /** Set/replace the current user (used by the sign-in modal on success). */
+  setCurrentUser: (user: User | null) => void;
+
+  // Global sign-in modal.
+  signInOpen: boolean;
+  signInRedirect: string | null;
+  openSignIn: (redirect?: string | null) => void;
+  closeSignIn: () => void;
+
   /** Load current user + members once on entry. Returns the user (or null). */
   bootstrap: () => Promise<User | null>;
   /** Re-fetch the task list using the current filters (optionally forcing mine). */
@@ -98,6 +109,23 @@ export const useTaskStore = create<TaskStoreState>((set, get) => ({
   pushToast: (type, message) =>
     set((s) => ({ toasts: [...s.toasts, { id: toastSeq++, type, message }] })),
   dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
+
+  loadSession: async () => {
+    try {
+      const { user } = await api.fetchMe();
+      set({ currentUser: user, bootstrapped: true });
+      return user;
+    } catch {
+      set({ currentUser: null, bootstrapped: true });
+      return null;
+    }
+  },
+  setCurrentUser: (user) => set({ currentUser: user }),
+
+  signInOpen: false,
+  signInRedirect: null,
+  openSignIn: (redirect = null) => set({ signInOpen: true, signInRedirect: redirect }),
+  closeSignIn: () => set({ signInOpen: false, signInRedirect: null }),
 
   bootstrap: async () => {
     try {

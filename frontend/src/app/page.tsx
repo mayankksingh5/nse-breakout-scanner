@@ -1,12 +1,11 @@
 'use client';
 
 import { useIpoStore } from '@/store/useIpoStore';
-import { AppHeader } from '@/components/AppHeader';
+import { TopBar } from '@/components/nav/TopBar';
 import { WelcomeSplash } from '@/components/WelcomeSplash';
 import { StocksView } from '@/components/stocks/StocksView';
 import { IpoDashboard } from '@/components/ipo/IpoDashboard';
 import { CompareTray } from '@/components/ipo/CompareTray';
-import { ThemeSync } from '@/components/ui/ThemeToggle';
 
 /**
  * Single-page dashboard. The Stocks and IPO views are BOTH mounted at all
@@ -19,9 +18,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <ThemeSync />
       <WelcomeSplash />
-      <AppHeader />
+      <TopBar />
 
       <main className="mx-auto max-w-7xl pb-28">
         <div className={activeTab === 'stocks' ? '' : 'hidden'}>

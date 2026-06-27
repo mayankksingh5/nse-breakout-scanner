@@ -121,11 +121,13 @@ export function StocksView() {
   return (
     <div className="bg-slate-50 font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-50">
       {/* Market indices strip — pinned at the very top of the Stocks page */}
-      <MarketIndices asOf={freshness?.absolute} />
+      <div id="market-data" className="scroll-mt-20">
+        <MarketIndices asOf={freshness?.absolute} />
+      </div>
 
       <div className="p-6">
       {/* Top banner */}
-      <div className="mb-6 flex flex-col items-start justify-between gap-4 border-b border-slate-200 pb-6 dark:border-slate-800 md:flex-row md:items-center">
+      <div id="scanner" className="mb-6 flex scroll-mt-20 flex-col items-start justify-between gap-4 border-b border-slate-200 pb-6 dark:border-slate-800 md:flex-row md:items-center">
         <div>
           <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
             ULTRA SCANNER
